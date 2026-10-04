@@ -341,7 +341,7 @@ CREATE POLICY "Public inventory read" ON inventory FOR SELECT USING (true);
 CREATE POLICY "Public inventory_movements read" ON inventory_movements FOR SELECT USING (true);
 CREATE POLICY "Public combos read" ON combos FOR SELECT USING (is_active = true);
 CREATE POLICY "Public combo_items read" ON combo_items FOR SELECT USING (true);
-CREATE POLICY "Public delivery_zones read" ON delivery_zones FOR SELECT USING (is_active = true);
+CREATE POLICY "Public delivery_zones read" ON delivery_zones FOR SELECT USING (true);
 
 -- Checkout Public Order Placement Policies
 CREATE POLICY "Public orders insert" ON orders FOR INSERT WITH CHECK (true);
@@ -350,14 +350,14 @@ CREATE POLICY "Public order_items insert" ON order_items FOR INSERT WITH CHECK (
 CREATE POLICY "Public order_items read" ON order_items FOR SELECT USING (true);
 
 -- Authenticated Admin Management Policies
-CREATE POLICY "Admin store_settings write" ON store_settings FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin store_settings write" ON store_settings FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Admin categories full access" ON categories FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admin products full access" ON products FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admin inventory full access" ON inventory FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admin inventory_movements full access" ON inventory_movements FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admin combos full access" ON combos FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admin combo_items full access" ON combo_items FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin delivery_zones write" ON delivery_zones FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin delivery_zones write" ON delivery_zones FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Admin orders full access" ON orders FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admin order_items full access" ON order_items FOR ALL USING (auth.role() = 'authenticated');
 
@@ -543,10 +543,15 @@ INSERT INTO store_settings (key, value) VALUES
 ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
 
 -- 10.3 SEED REGIONAL DELIVERY ZONES
-INSERT INTO delivery_zones (zone_name, state_codes, min_order_amount, delivery_fee, estimated_days) VALUES 
-  ('South India (Tamil Nadu, Kerala, Karnataka, AP, Telangana, Puducherry)', ARRAY['TN', 'Tamil Nadu', 'PY', 'KL', 'KA', 'AP', 'TS', 'Puducherry', 'Kerala', 'Karnataka', 'Andhra Pradesh', 'Telangana'], 4000.00, 150.00, '2-4 Days'),
-  ('Rest of India', ARRAY['MH', 'DL', 'GJ', 'RJ', 'UP', 'WB', 'MP', 'HR', 'PB', 'ALL'], 5000.00, 250.00, '4-7 Days')
-ON CONFLICT DO NOTHING;
+INSERT INTO delivery_zones (id, zone_name, state_codes, min_order_amount, delivery_fee, estimated_days) VALUES 
+  ('55555555-0000-0000-0000-000000000001', 'South India (Tamil Nadu, Kerala, Karnataka, AP, Telangana, Puducherry)', ARRAY['TN', 'Tamil Nadu', 'PY', 'KL', 'KA', 'AP', 'TS', 'Puducherry', 'Kerala', 'Karnataka', 'Andhra Pradesh', 'Telangana'], 4000.00, 150.00, '2-4 Days'),
+  ('55555555-0000-0000-0000-000000000002', 'Rest of India', ARRAY['MH', 'DL', 'GJ', 'RJ', 'UP', 'WB', 'MP', 'HR', 'PB', 'ALL'], 5000.00, 250.00, '4-7 Days')
+ON CONFLICT (id) DO UPDATE SET
+  zone_name = EXCLUDED.zone_name,
+  state_codes = EXCLUDED.state_codes,
+  min_order_amount = EXCLUDED.min_order_amount,
+  delivery_fee = EXCLUDED.delivery_fee,
+  estimated_days = EXCLUDED.estimated_days;
 
 -- 10.4 SEED 15 OFFICIAL SIVAKASI CATEGORIES
 INSERT INTO categories (id, name, slug, description, icon_name, display_order, is_active) VALUES

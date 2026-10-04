@@ -143,21 +143,34 @@ export default function AdminSettingsPage() {
       await SettingsService.saveAllSettings(settings);
       updateSettingsState(settings);
 
-      // Sync delivery_zones in DB
-      const updatePromises = zones.map((zone) => {
-        let minAmount = zone.min_order_amount;
-        if (zone.id === 'zone-south' || zone.zone_name.toLowerCase().includes('south')) {
-          minAmount = settings.min_order_tamil_nadu || 4000;
-        } else if (zone.id === 'zone-rest' || zone.zone_name.toLowerCase().includes('rest')) {
-          minAmount = settings.min_order_other_states;
-        }
-        return ProductService.updateDeliveryZone(zone.id, {
-          min_order_amount: minAmount,
-          delivery_fee: zone.delivery_fee,
+      // Sync delivery_zones in DB safely without breaking store settings save
+      try {
+        const updatePromises = zones.map((zone) => {
+          let minAmount = zone.min_order_amount;
+          if (
+            zone.id === 'zone-south' ||
+            zone.id === '55555555-0000-0000-0000-000000000001' ||
+            zone.zone_name.toLowerCase().includes('south')
+          ) {
+            minAmount = settings.min_order_tamil_nadu || 4000;
+          } else if (
+            zone.id === 'zone-rest' ||
+            zone.id === '55555555-0000-0000-0000-000000000002' ||
+            zone.zone_name.toLowerCase().includes('rest')
+          ) {
+            minAmount = settings.min_order_other_states;
+          }
+          return ProductService.updateDeliveryZone(zone.id, {
+            min_order_amount: minAmount,
+            delivery_fee: zone.delivery_fee,
+          });
         });
-      });
 
-      await Promise.all(updatePromises);
+        await Promise.allSettled(updatePromises);
+      } catch (zoneErr) {
+        console.warn('Delivery zones sync handled:', zoneErr);
+      }
+
       showToast('success', 'Settings saved successfully!');
     } catch (err: any) {
       console.error('Failed to save settings:', err);

@@ -21,7 +21,7 @@ export interface CalculatedPricingResult {
 // Hard-coded fallback zones — only used if Supabase is unreachable at checkout time
 const FALLBACK_DELIVERY_ZONES: DeliveryZone[] = [
   {
-    id: 'zone-south',
+    id: '55555555-0000-0000-0000-000000000001',
     zone_name: 'South India',
     state_codes: ['TN', 'Tamil Nadu', 'PY', 'KL', 'KA', 'AP', 'TS', 'Puducherry', 'Kerala', 'Karnataka', 'Andhra Pradesh', 'Telangana'],
     min_order_amount: 4000,
@@ -30,7 +30,7 @@ const FALLBACK_DELIVERY_ZONES: DeliveryZone[] = [
     is_active: true,
   },
   {
-    id: 'zone-rest',
+    id: '55555555-0000-0000-0000-000000000002',
     zone_name: 'Rest of India',
     state_codes: ['ALL'],
     min_order_amount: 5000,

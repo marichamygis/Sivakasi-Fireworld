@@ -25,10 +25,15 @@ INSERT INTO store_settings (key, value) VALUES
 ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
 
 -- 2. SEED REGIONAL DELIVERY ZONES
-INSERT INTO delivery_zones (zone_name, state_codes, min_order_amount, delivery_fee, estimated_days) VALUES 
-  ('South India (Tamil Nadu, Kerala, Karnataka, AP, Telangana, Puducherry)', ARRAY['TN', 'Tamil Nadu', 'PY', 'KL', 'KA', 'AP', 'TS', 'Puducherry', 'Kerala', 'Karnataka', 'Andhra Pradesh', 'Telangana'], 4000.00, 150.00, '2-4 Days'),
-  ('Rest of India', ARRAY['MH', 'DL', 'GJ', 'RJ', 'UP', 'WB', 'MP', 'HR', 'PB', 'ALL'], 5000.00, 250.00, '4-7 Days')
-ON CONFLICT DO NOTHING;
+INSERT INTO delivery_zones (id, zone_name, state_codes, min_order_amount, delivery_fee, estimated_days) VALUES 
+  ('55555555-0000-0000-0000-000000000001', 'South India (Tamil Nadu, Kerala, Karnataka, AP, Telangana, Puducherry)', ARRAY['TN', 'Tamil Nadu', 'PY', 'KL', 'KA', 'AP', 'TS', 'Puducherry', 'Kerala', 'Karnataka', 'Andhra Pradesh', 'Telangana'], 4000.00, 150.00, '2-4 Days'),
+  ('55555555-0000-0000-0000-000000000002', 'Rest of India', ARRAY['MH', 'DL', 'GJ', 'RJ', 'UP', 'WB', 'MP', 'HR', 'PB', 'ALL'], 5000.00, 250.00, '4-7 Days')
+ON CONFLICT (id) DO UPDATE SET
+  zone_name = EXCLUDED.zone_name,
+  state_codes = EXCLUDED.state_codes,
+  min_order_amount = EXCLUDED.min_order_amount,
+  delivery_fee = EXCLUDED.delivery_fee,
+  estimated_days = EXCLUDED.estimated_days;
 
 -- Migration: 20260808_clear_db_and_seed_catalog.sql
 -- Clears transactional & product DB tables (keeps admin user, store_settings, delivery_zones)
