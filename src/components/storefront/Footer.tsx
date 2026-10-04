@@ -44,9 +44,9 @@ export const Footer: React.FC = () => {
             <Image
               src="/logo.png"
               alt="Sivakasi Fireworld Logo"
-              width={26}
-              height={26}
-              className="w-6 h-6 object-contain"
+              width={48}
+              height={32}
+              className="h-7 w-auto max-w-[44px] object-contain"
             />
             <span className="font-black text-sm text-slate-950">
               {settings?.store_name || 'SIVAKASI FIREWORLD'}

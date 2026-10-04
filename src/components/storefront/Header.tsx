@@ -101,10 +101,10 @@ export const Header: React.FC<HeaderProps> = ({
             <Image
               src="/logo.png"
               alt="Sivakasi Fireworld Logo"
-              width={38}
-              height={38}
+              width={48}
+              height={32}
               priority
-              className="w-8 h-8 sm:w-9 sm:h-9 object-contain shrink-0 transition-transform group-hover:scale-105"
+              className="h-8 sm:h-9 w-auto max-w-[48px] sm:max-w-[54px] object-contain shrink-0 transition-transform group-hover:scale-105"
             />
             <div className="flex items-center gap-2">
               <span className="text-base sm:text-lg tracking-tight font-heading whitespace-nowrap">
@@ -349,9 +349,9 @@ export const Header: React.FC<HeaderProps> = ({
                   <Image
                     src="/logo.png"
                     alt="Sivakasi Fireworld Logo"
-                    width={32}
+                    width={48}
                     height={32}
-                    className="w-7 h-7 object-contain shrink-0"
+                    className="h-7 w-auto max-w-[44px] object-contain shrink-0"
                   />
                   <span className="text-base tracking-tight font-heading whitespace-nowrap">
                     <span className="font-extrabold text-slate-900">SIVAKASI</span>{' '}

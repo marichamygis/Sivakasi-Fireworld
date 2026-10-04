@@ -6,10 +6,16 @@ import { SettingsService, StoreSettings } from '@/lib/services/settings.service'
 const SETTINGS_STORAGE_KEY = 'sfw_store_settings_cache_v2';
 
 function sanitizeStoreSettings(s: StoreSettings): StoreSettings {
-  if (!s || !s.store_name || /vail[iy]/i.test(s.store_name)) {
-    return { ...s, store_name: 'Sivakasi Fireworld' };
+  if (!s) return DEFAULT_STORE_SETTINGS;
+  const clean = { ...s };
+  if (!clean.store_name || /vail[iy]/i.test(clean.store_name)) {
+    clean.store_name = 'Sivakasi Fireworld';
   }
-  return s;
+  if (!clean.hero_banner_image_url || clean.hero_banner_image_url === '/hero-banner.webp') {
+    clean.hero_banner_image_url = '';
+    clean.hero_banner_enabled = false;
+  }
+  return clean;
 }
 
 const DEFAULT_STORE_SETTINGS: StoreSettings = {
@@ -26,8 +32,8 @@ const DEFAULT_STORE_SETTINGS: StoreSettings = {
   min_order_tamil_nadu: 3000,
   min_order_other_states: 5000,
   state_min_order_overrides: {},
-  hero_banner_enabled: true,
-  hero_banner_image_url: '/hero-banner.webp',
+  hero_banner_enabled: false,
+  hero_banner_image_url: '',
   hero_banner_link_url: '#catalog',
 };
 

@@ -85,8 +85,8 @@ export default function AdminSettingsPage() {
     min_order_tamil_nadu: 3000,
     min_order_other_states: 5000,
     state_min_order_overrides: {},
-    hero_banner_enabled: true,
-    hero_banner_image_url: '/hero-banner.webp',
+    hero_banner_enabled: false,
+    hero_banner_image_url: '',
     hero_banner_link_url: '#catalog',
   });
 

@@ -26,8 +26,8 @@ import { SettingsService, StoreSettings } from '@/lib/services/settings.service'
 export default function AdminBannersPage() {
   const { settings, refreshSettings } = useStoreSettings();
 
-  const [heroBannerEnabled, setHeroBannerEnabled] = useState<boolean>(true);
-  const [bannerImageUrl, setBannerImageUrl] = useState<string>('/hero-banner.webp');
+  const [heroBannerEnabled, setHeroBannerEnabled] = useState<boolean>(false);
+  const [bannerImageUrl, setBannerImageUrl] = useState<string>('');
   const [bannerLinkUrl, setBannerLinkUrl] = useState<string>('#catalog');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
@@ -41,8 +41,11 @@ export default function AdminBannersPage() {
   // Sync state when settings load
   useEffect(() => {
     if (settings) {
-      setHeroBannerEnabled(settings.hero_banner_enabled !== false);
-      setBannerImageUrl(settings.hero_banner_image_url || '/hero-banner.webp');
+      const img = (settings.hero_banner_image_url && settings.hero_banner_image_url !== '/hero-banner.webp')
+        ? settings.hero_banner_image_url
+        : '';
+      setHeroBannerEnabled(Boolean(settings.hero_banner_enabled && img));
+      setBannerImageUrl(img);
       setBannerLinkUrl(settings.hero_banner_link_url || '#catalog');
     }
   }, [settings]);
@@ -55,16 +58,18 @@ export default function AdminBannersPage() {
       const objectUrl = URL.createObjectURL(file);
       setPreviewUrl(objectUrl);
       setBannerImageUrl(objectUrl);
+      setHeroBannerEnabled(true);
       setSuccessMsg('');
     }
   };
 
-  // Restore pre-built festive Diwali fireworks artwork
+  // Clear banner image
   const handleRestoreDefault = () => {
     setSelectedFile(null);
     setPreviewUrl('');
-    setBannerImageUrl('/hero-banner.webp');
-    setSuccessMsg('Restored Diwali 2026 festive fireworks artwork. Click Save to apply.');
+    setBannerImageUrl('');
+    setHeroBannerEnabled(false);
+    setSuccessMsg('Banner removed. Click Save to apply.');
   };
 
   // Save changes to database
@@ -91,10 +96,12 @@ export default function AdminBannersPage() {
         setUploading(false);
       }
 
+      const cleanBannerUrl = finalImageUrl && finalImageUrl !== '/hero-banner.webp' ? finalImageUrl : '';
+
       const updatedSettings: StoreSettings = {
         ...settings,
-        hero_banner_enabled: heroBannerEnabled,
-        hero_banner_image_url: finalImageUrl || '/hero-banner.webp',
+        hero_banner_enabled: Boolean(heroBannerEnabled && cleanBannerUrl),
+        hero_banner_image_url: cleanBannerUrl,
         hero_banner_link_url: bannerLinkUrl.trim() || '#catalog',
       };
 

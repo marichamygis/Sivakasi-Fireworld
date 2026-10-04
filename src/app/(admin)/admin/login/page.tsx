@@ -59,13 +59,14 @@ export default function AdminLoginPage() {
           
           {/* Brand & Header */}
           <div className="text-center space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 p-2 flex items-center justify-center mx-auto shadow-md">
+            <div className="w-20 h-16 rounded-2xl bg-white border border-slate-200/90 p-2 flex items-center justify-center mx-auto shadow-md shadow-slate-200/50">
               <Image
                 src="/logo.png"
                 alt="Sivakasi Fireworld Logo"
-                width={48}
+                width={72}
                 height={48}
-                className="w-12 h-12 object-contain"
+                className="w-full h-full object-contain"
+                priority
               />
             </div>
             <div className="space-y-1">

@@ -17,12 +17,12 @@ export const StorefrontCatalogLoader: React.FC = () => {
             {/* Outer spinning ring with gradient */}
             <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-amber-500 border-r-rose-500 border-b-amber-400 animate-spin" />
             
-            {/* Inner pulsing glow circle */}
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-amber-500 via-amber-400 to-amber-300 flex items-center justify-center shadow-lg shadow-amber-500/30 animate-pulse">
+            {/* Inner logo badge circle */}
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white border-2 border-amber-400 flex items-center justify-center shadow-lg shadow-amber-500/20">
               <img
                 src="/logo.png"
                 alt="Sivakasi Fireworld"
-                className="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow"
+                className="w-10 h-10 sm:w-11 sm:h-11 object-contain drop-shadow-xs"
               />
             </div>
 

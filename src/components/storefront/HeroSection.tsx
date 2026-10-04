@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import {
   Sparkles,
   ShieldCheck,
@@ -106,32 +107,55 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
             </div>
 
-            {/* Right Banner Image / Graphic Promo Column */}
+            {/* Right Promo Column */}
             <div className="lg:col-span-5 relative">
-              <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-900 group/img">
-                <img
-                  src={heroBannerImageUrl || '/hero-banner.webp'}
-                  alt={`${storeName} Sivakasi Fireworks Promotion`}
-                  className="w-full h-44 sm:h-52 object-cover transition-transform duration-700 group-hover/img:scale-105"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    if (!target.src.endsWith('/hero-banner.webp')) {
-                      target.src = '/hero-banner.webp';
-                    }
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent flex flex-col justify-end p-3 sm:p-4">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-extrabold text-amber-300 flex items-center gap-1.5">
-                      <Gift className="w-4 h-4 text-amber-400" />
-                      Family Gift Boxes Available
-                    </span>
-                    <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/40 font-bold">
-                      2026 Fresh Stock
+              {heroBannerImageUrl && heroBannerImageUrl !== '/hero-banner.webp' ? (
+                <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-900 group/img">
+                  <img
+                    src={heroBannerImageUrl}
+                    alt={`${storeName} Sivakasi Fireworks Promotion`}
+                    className="w-full h-44 sm:h-52 object-cover transition-transform duration-700 group-hover/img:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent flex flex-col justify-end p-3 sm:p-4">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-extrabold text-amber-300 flex items-center gap-1.5">
+                        <Gift className="w-4 h-4 text-amber-400" />
+                        Family Gift Boxes Available
+                      </span>
+                      <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/40 font-bold">
+                        2026 Fresh Stock
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-amber-500/30 shadow-2xl bg-gradient-to-br from-slate-900/90 via-slate-950 to-amber-950/50 p-5 sm:p-6 flex flex-col items-center justify-center text-center group/card backdrop-blur-sm">
+                  {/* Ambient background light */}
+                  <div className="absolute -top-12 -right-12 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
+                  <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-red-600/20 rounded-full blur-3xl pointer-events-none" />
+
+                  <div className="relative z-10 flex flex-col items-center">
+                    <div className="w-40 h-28 sm:w-48 sm:h-32 relative flex items-center justify-center mb-2 transition-transform duration-500 group-hover/card:scale-105">
+                      <Image
+                        src="/logo.png"
+                        alt={storeName}
+                        width={220}
+                        height={147}
+                        priority
+                        className="w-full h-full object-contain drop-shadow-[0_10px_25px_rgba(245,158,11,0.35)]"
+                      />
+                    </div>
+
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-[11px] font-black uppercase tracking-wider mb-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Direct Sivakasi Factory Hub</span>
+                    </div>
+                    <span className="text-xs text-slate-300 font-semibold">
+                      100% Genuine Certified Green Fireworks
                     </span>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

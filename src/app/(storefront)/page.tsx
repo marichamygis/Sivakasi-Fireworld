@@ -214,8 +214,8 @@ export default function StorefrontPage() {
         />
 
         <main className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-5 space-y-4">
-          {/* HERO BANNER (Only from settings when enabled) */}
-          {settings.hero_banner_enabled && (
+          {/* HERO BANNER (Only from settings when enabled with a custom image) */}
+          {settings.hero_banner_enabled && settings.hero_banner_image_url && settings.hero_banner_image_url !== '/hero-banner.webp' && (
             <div className="relative w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-amber-200/90 shadow-2xs group transition-all">
               <a
                 href={settings.hero_banner_link_url || '#catalog'}
@@ -223,16 +223,10 @@ export default function StorefrontPage() {
                 title={`${settings.store_name} — Price List`}
               >
                 <img
-                  src={settings.hero_banner_image_url || '/hero-banner.webp'}
+                  src={settings.hero_banner_image_url}
                   alt={`${settings.store_name} Banner`}
                   loading="eager"
                   decoding="async"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    if (!target.src.endsWith('/hero-banner.webp')) {
-                      target.src = '/hero-banner.webp';
-                    }
-                  }}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.01]"
                 />
                 <div className="absolute bottom-2.5 right-2.5 sm:bottom-4 sm:right-4 z-10 flex items-center gap-2">

@@ -63,9 +63,9 @@ export function AdminSidebar({ userEmail, onSignOutClick, onNavClick }: AdminSid
             <Image
               src="/logo.png"
               alt={`${storeName} Logo`}
-              width={36}
-              height={36}
-              className="w-9 h-9 object-contain shrink-0"
+              width={48}
+              height={32}
+              className="h-8 w-auto max-w-[44px] object-contain shrink-0"
             />
             <div className="min-w-0">
               <span className="font-bold text-sm text-slate-900 tracking-tight block truncate max-w-[155px]" title={storeName}>

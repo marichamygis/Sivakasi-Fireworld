@@ -35,8 +35,8 @@ const DEFAULT_SETTINGS: StoreSettings = {
   min_order_tamil_nadu: 3000,
   min_order_other_states: 5000,
   state_min_order_overrides: {},
-  hero_banner_enabled: true,
-  hero_banner_image_url: '/hero-banner.webp',
+  hero_banner_enabled: false,
+  hero_banner_image_url: '',
   hero_banner_link_url: '#catalog',
 };
 
@@ -121,9 +121,9 @@ export class SettingsService {
         }
       }
 
-      const heroBannerEnabled = settingsMap['hero_banner_enabled'] !== undefined
-        ? settingsMap['hero_banner_enabled'] === 'true'
-        : DEFAULT_SETTINGS.hero_banner_enabled;
+      const rawBannerUrl = settingsMap['hero_banner_image_url'] || '';
+      const bannerUrl = (rawBannerUrl && rawBannerUrl !== '/hero-banner.webp') ? rawBannerUrl : '';
+      const heroBannerEnabled = bannerUrl ? (settingsMap['hero_banner_enabled'] === 'true') : false;
 
       let resolvedStoreName = settingsMap['store_name'] ?? DEFAULT_SETTINGS.store_name;
       if (!resolvedStoreName || /vail[iy]/i.test(resolvedStoreName)) {
@@ -150,7 +150,7 @@ export class SettingsService {
         min_order_other_states: !isNaN(parsedMinOther) && parsedMinOther > 0 ? parsedMinOther : DEFAULT_SETTINGS.min_order_other_states,
         state_min_order_overrides: parsedStateOverrides,
         hero_banner_enabled: heroBannerEnabled,
-        hero_banner_image_url: settingsMap['hero_banner_image_url'] || DEFAULT_SETTINGS.hero_banner_image_url,
+        hero_banner_image_url: bannerUrl,
         hero_banner_link_url: settingsMap['hero_banner_link_url'] || DEFAULT_SETTINGS.hero_banner_link_url,
       };
 
@@ -255,7 +255,7 @@ export class SettingsService {
       { key: 'min_order_other_states', value: String(settings.min_order_other_states) },
       { key: 'state_min_order_overrides', value: JSON.stringify(settings.state_min_order_overrides || {}) },
       { key: 'hero_banner_enabled', value: String(settings.hero_banner_enabled) },
-      { key: 'hero_banner_image_url', value: settings.hero_banner_image_url || '/hero-banner.webp' },
+      { key: 'hero_banner_image_url', value: settings.hero_banner_image_url || '' },
       { key: 'hero_banner_link_url', value: settings.hero_banner_link_url || '#catalog' },
     ].map((r) => ({ ...r, updated_at: new Date().toISOString() }));
 
