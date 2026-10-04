@@ -954,7 +954,8 @@ DECLARE
 BEGIN
   SELECT COALESCE(NULLIF(value, '')::NUMERIC, 80) INTO v_discount
   FROM store_settings
-  WHERE key = 'discount_percentage';
+  WHERE key = 'discount_percentage'
+  LIMIT 1;
 
   UPDATE products
   SET 

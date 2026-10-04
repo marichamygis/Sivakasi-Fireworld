@@ -107,7 +107,7 @@ export class OrderService {
       .from('orders')
       .insert(newOrderPayload)
       .select()
-      .single();
+      .maybeSingle();
 
     if (orderError || !orderData) {
       throw orderError || new Error('Failed to create order. Please try again.');
@@ -165,7 +165,7 @@ export class OrderService {
       .from('orders')
       .select('*, items:order_items(*)')
       .or(`id.eq.${id},order_number.eq.${id}`)
-      .single();
+      .maybeSingle();
 
     if (error || !data) return null;
 
@@ -243,7 +243,7 @@ export class OrderService {
       .update(updatePayload)
       .eq('id', id)
       .select('*, items:order_items(*)')
-      .single();
+      .maybeSingle();
 
     if (error || !data) {
       console.error('OrderService.updateOrderStatus error:', error?.message);
@@ -328,7 +328,7 @@ export class OrderService {
       })
       .eq('id', current.id)
       .select('*, items:order_items(*)')
-      .single();
+      .maybeSingle();
 
     if (error || !data) {
       console.error('OrderService.cancelOrder error:', error?.message);
@@ -389,7 +389,7 @@ export class OrderService {
       .update(payload)
       .eq('id', id)
       .select('*, items:order_items(*)')
-      .single();
+      .maybeSingle();
 
     if (error || !data) {
       throw new Error(error?.message || `Failed to update logistics for order ${id}.`);
@@ -411,7 +411,7 @@ export class OrderService {
       .update({ is_paid: isPaid, updated_at: new Date().toISOString() })
       .eq('id', id)
       .select('*, items:order_items(*)')
-      .single();
+      .maybeSingle();
 
     if (error || !data) {
       throw new Error(error?.message || `Failed to update payment for order ${id}.`);

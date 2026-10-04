@@ -208,7 +208,7 @@ export class ProductService {
       .from('categories')
       .insert(payload)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error || !data) {
       console.error('Supabase createCategory error:', error);
@@ -243,7 +243,7 @@ export class ProductService {
       .update(payload)
       .eq('id', id)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error || !data) {
       console.error('Supabase updateCategory error:', error);
@@ -288,7 +288,7 @@ export class ProductService {
       .update(payload)
       .eq('id', id)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error || !data) {
       console.error('Supabase updateDeliveryZone error:', error);
@@ -404,7 +404,7 @@ export class ProductService {
       .from('products')
       .insert(payload)
       .select('*, category:categories(*)')
-      .single();
+      .maybeSingle();
 
     if (error || !data) {
       console.error('Supabase createProduct error:', error);
@@ -464,7 +464,7 @@ export class ProductService {
       .update(payload)
       .eq('id', id)
       .select('*, category:categories(*)')
-      .single();
+      .maybeSingle();
 
     if (error || !data) {
       console.error('Supabase updateProduct error:', error);
@@ -704,7 +704,7 @@ export class ProductService {
       created_at: new Date().toISOString(),
     };
 
-    const { data, error } = await supabase.from('combos').insert(payload).select().single();
+    const { data, error } = await supabase.from('combos').insert(payload).select().maybeSingle();
     if (error || !data) {
       console.error('createCombo error:', error);
       throw error ?? new Error('Failed to create combo.');
@@ -740,7 +740,7 @@ export class ProductService {
     if (comboData.image_url !== undefined) payload.image_url = comboData.image_url;
     if (comboData.is_active !== undefined) payload.is_active = comboData.is_active;
 
-    const { data, error } = await supabase.from('combos').update(payload).eq('id', id).select().single();
+    const { data, error } = await supabase.from('combos').update(payload).eq('id', id).select().maybeSingle();
     if (error || !data) {
       console.error('updateCombo error:', error);
       throw error ?? new Error('Failed to update combo.');

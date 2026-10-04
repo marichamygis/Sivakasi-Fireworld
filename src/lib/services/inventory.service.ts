@@ -53,7 +53,7 @@ export class InventoryService {
       .from('inventory')
       .select('*, product:products(id, name, sku)')
       .eq('product_id', productId)
-      .single();
+      .maybeSingle();
 
     if (error || !data) return null;
 
@@ -100,7 +100,7 @@ export class InventoryService {
       })
       .eq('product_id', productId)
       .select('*, product:products(id, name, sku)')
-      .single();
+      .maybeSingle();
 
     if (updateErr || !updatedRow) {
       console.error('InventoryService.adjustStock update error:', updateErr);

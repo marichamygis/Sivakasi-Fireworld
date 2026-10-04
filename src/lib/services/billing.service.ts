@@ -132,7 +132,7 @@ export class BillingService {
         .from('bills')
         .insert(billPayload)
         .select()
-        .single();
+        .maybeSingle();
 
       if (!billError && billData) {
         const billItemsPayload = dto.items.map((item) => ({
@@ -223,7 +223,7 @@ export class BillingService {
           .from('orders')
           .insert(orderPayload)
           .select()
-          .single();
+          .maybeSingle();
 
         if (!orderError && orderData) {
           const orderItemsPayload = dto.items.map((item) => ({
