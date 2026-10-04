@@ -48,6 +48,12 @@ export function AdminSidebar({ userEmail, onSignOutClick, onNavClick }: AdminSid
     { href: '/admin/profile', label: 'Profile', icon: User },
   ];
 
+  const rawStoreName = settings?.store_name || '';
+  const storeName =
+    !rawStoreName || /vail[iy]/i.test(rawStoreName)
+      ? 'Sivakasi Fireworld'
+      : rawStoreName;
+
   return (
     <aside className="w-full md:w-64 bg-white text-slate-900 shrink-0 border-r border-slate-200/90 h-full flex flex-col justify-between p-4 shadow-2xs">
       <div>
@@ -56,14 +62,14 @@ export function AdminSidebar({ userEmail, onSignOutClick, onNavClick }: AdminSid
           <div className="flex items-center gap-2.5 min-w-0">
             <Image
               src="/logo.png"
-              alt={`${settings.store_name} Logo`}
+              alt={`${storeName} Logo`}
               width={36}
               height={36}
               className="w-9 h-9 object-contain shrink-0"
             />
             <div className="min-w-0">
-              <span className="font-bold text-sm text-slate-900 tracking-tight block truncate max-w-[140px]" title={settings.store_name}>
-                {settings.store_name}
+              <span className="font-bold text-sm text-slate-900 tracking-tight block truncate max-w-[155px]" title={storeName}>
+                {storeName}
               </span>
               <span className="text-[10px] text-amber-600 font-semibold uppercase tracking-wider block -mt-0.5">
                 Admin Panel

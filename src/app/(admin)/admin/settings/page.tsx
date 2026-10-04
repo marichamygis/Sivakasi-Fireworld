@@ -106,6 +106,9 @@ export default function AdminSettingsPage() {
         SettingsService.getAllSettings(),
         ProductService.getDeliveryZones(),
       ]);
+      if (!fetchedSettings.store_name || /vail[iy]/i.test(fetchedSettings.store_name)) {
+        fetchedSettings.store_name = 'Sivakasi Fireworld';
+      }
       setSettings(fetchedSettings);
       setZones(fetchedZones);
     } catch (err: any) {

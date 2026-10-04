@@ -248,7 +248,7 @@ export default function AdminDashboardPage() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `VPP_Orders_${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `Sivakasi_Fireworld_Orders_${new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

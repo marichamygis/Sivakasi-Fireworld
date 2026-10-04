@@ -49,7 +49,14 @@ export class SettingsService {
    * Synchronous getter for instant 0ms setting retrieval.
    */
   static getCachedSettings(): StoreSettings | null {
-    return localCache.getSync<StoreSettings>('store_settings');
+    const cached = localCache.getSync<StoreSettings>('store_settings');
+    if (cached) {
+      if (!cached.store_name || /vail[iy]/i.test(cached.store_name)) {
+        cached.store_name = 'Sivakasi Fireworld';
+      }
+      return cached;
+    }
+    return null;
   }
 
   /**
@@ -118,8 +125,18 @@ export class SettingsService {
         ? settingsMap['hero_banner_enabled'] === 'true'
         : DEFAULT_SETTINGS.hero_banner_enabled;
 
+      let resolvedStoreName = settingsMap['store_name'] ?? DEFAULT_SETTINGS.store_name;
+      if (!resolvedStoreName || /vail[iy]/i.test(resolvedStoreName)) {
+        resolvedStoreName = 'Sivakasi Fireworld';
+        // Proactively auto-heal Supabase store_settings table in background
+        supabase
+          .from('store_settings')
+          .upsert({ key: 'store_name', value: 'Sivakasi Fireworld', updated_at: new Date().toISOString() }, { onConflict: 'key' })
+          .then();
+      }
+
       const settings: StoreSettings = {
-        store_name: settingsMap['store_name'] ?? DEFAULT_SETTINGS.store_name,
+        store_name: resolvedStoreName,
         tagline: settingsMap['tagline'] ?? DEFAULT_SETTINGS.tagline,
         helpline_mobile: settingsMap['helpline_mobile'] ?? DEFAULT_SETTINGS.helpline_mobile,
         whatsapp_number: settingsMap['whatsapp_number'] ?? DEFAULT_SETTINGS.whatsapp_number,
@@ -149,6 +166,7 @@ export class SettingsService {
     try {
       const fresh = await this.fetchSettingsFromDb();
       if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('sfw_store_settings_updated', { detail: fresh }));
         window.dispatchEvent(new CustomEvent('vpp_store_settings_updated', { detail: fresh }));
       }
     } catch {}
@@ -255,7 +273,9 @@ export class SettingsService {
 
     if (typeof window !== 'undefined') {
       try {
-        localStorage.setItem('vpp_store_settings_cache_v1', JSON.stringify(settings));
+        localStorage.removeItem('vpp_store_settings_cache_v1');
+        localStorage.setItem('sfw_store_settings_cache_v2', JSON.stringify(settings));
+        window.dispatchEvent(new CustomEvent('sfw_store_settings_updated', { detail: settings }));
         window.dispatchEvent(new CustomEvent('vpp_store_settings_updated', { detail: settings }));
       } catch (err) {
         console.warn('Failed to dispatch settings update event:', err);
@@ -284,7 +304,9 @@ export class SettingsService {
     if (typeof window !== 'undefined') {
       try {
         const fresh = await this.getAllSettings({ forceFresh: true });
-        localStorage.setItem('vpp_store_settings_cache_v1', JSON.stringify(fresh));
+        localStorage.removeItem('vpp_store_settings_cache_v1');
+        localStorage.setItem('sfw_store_settings_cache_v2', JSON.stringify(fresh));
+        window.dispatchEvent(new CustomEvent('sfw_store_settings_updated', { detail: fresh }));
         window.dispatchEvent(new CustomEvent('vpp_store_settings_updated', { detail: fresh }));
       } catch (err) {
         console.warn('Failed to broadcast single setting update:', err);

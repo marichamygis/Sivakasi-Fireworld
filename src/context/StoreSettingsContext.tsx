@@ -3,7 +3,14 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { SettingsService, StoreSettings } from '@/lib/services/settings.service';
 
-const SETTINGS_STORAGE_KEY = 'vpp_store_settings_cache_v1';
+const SETTINGS_STORAGE_KEY = 'sfw_store_settings_cache_v2';
+
+function sanitizeStoreSettings(s: StoreSettings): StoreSettings {
+  if (!s || !s.store_name || /vail[iy]/i.test(s.store_name)) {
+    return { ...s, store_name: 'Sivakasi Fireworld' };
+  }
+  return s;
+}
 
 const DEFAULT_STORE_SETTINGS: StoreSettings = {
   store_name: 'Sivakasi Fireworld',
@@ -37,11 +44,14 @@ export const StoreSettingsProvider: React.FC<{ children: React.ReactNode }> = ({
   // Initialize with cached settings if available for instant 0ms first render
   const [settings, setSettings] = useState<StoreSettings>(() => {
     if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('vpp_store_settings_cache_v1');
+      } catch {}
       const cached = SettingsService.getCachedSettings();
-      if (cached) return cached;
+      if (cached) return sanitizeStoreSettings(cached);
       try {
         const raw = localStorage.getItem(SETTINGS_STORAGE_KEY);
-        if (raw) return { ...DEFAULT_STORE_SETTINGS, ...JSON.parse(raw) };
+        if (raw) return sanitizeStoreSettings({ ...DEFAULT_STORE_SETTINGS, ...JSON.parse(raw) });
       } catch {}
     }
     return DEFAULT_STORE_SETTINGS;
@@ -51,7 +61,7 @@ export const StoreSettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const refreshSettings = useCallback(async (force = false): Promise<StoreSettings> => {
     try {
-      const fresh = await SettingsService.getAllSettings({ forceFresh: force });
+      const fresh = sanitizeStoreSettings(await SettingsService.getAllSettings({ forceFresh: force }));
       setSettings(fresh);
       try {
         localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(fresh));
@@ -68,9 +78,10 @@ export const StoreSettingsProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const updateSettingsState = useCallback((newSettings: StoreSettings) => {
-    setSettings(newSettings);
+    const clean = sanitizeStoreSettings(newSettings);
+    setSettings(clean);
     try {
-      localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(newSettings));
+      localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(clean));
     } catch (err) {
       console.warn('Failed to cache settings in localStorage:', err);
     }
@@ -84,7 +95,7 @@ export const StoreSettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     const handleSettingsUpdated = (e: Event) => {
       const customEvent = e as CustomEvent<StoreSettings>;
       if (customEvent.detail) {
-        setSettings(customEvent.detail);
+        setSettings(sanitizeStoreSettings(customEvent.detail));
       } else {
         refreshSettings(true);
       }
@@ -94,17 +105,19 @@ export const StoreSettingsProvider: React.FC<{ children: React.ReactNode }> = ({
       if (e.key === SETTINGS_STORAGE_KEY && e.newValue) {
         try {
           const parsed = JSON.parse(e.newValue);
-          setSettings(parsed);
+          setSettings(sanitizeStoreSettings(parsed));
         } catch {
           // ignore
         }
       }
     };
 
+    window.addEventListener('sfw_store_settings_updated', handleSettingsUpdated);
     window.addEventListener('vpp_store_settings_updated', handleSettingsUpdated);
     window.addEventListener('storage', handleStorageChange);
 
     return () => {
+      window.removeEventListener('sfw_store_settings_updated', handleSettingsUpdated);
       window.removeEventListener('vpp_store_settings_updated', handleSettingsUpdated);
       window.removeEventListener('storage', handleStorageChange);
     };
