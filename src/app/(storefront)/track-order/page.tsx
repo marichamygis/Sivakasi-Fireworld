@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import {
   Search,
@@ -460,10 +461,24 @@ export default function TrackOrderPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-          <div className="text-center space-y-3">
-            <div className="w-10 h-10 border-3 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-xs font-bold text-slate-600">Loading Order Tracking...</p>
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans">
+          <div className="text-center space-y-4 max-w-sm">
+            <div className="relative inline-block">
+              <div className="p-4 bg-white rounded-2xl border border-amber-300 shadow-md">
+                <Image
+                  src="/logo.png"
+                  alt="Sivakasi Fireworld"
+                  width={160}
+                  height={100}
+                  priority
+                  className="h-14 w-auto object-contain animate-pulse"
+                />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs font-bold text-slate-800">Loading Order Tracking...</p>
+              <p className="text-[11px] text-slate-500">Connecting to Sivakasi dispatch records</p>
+            </div>
           </div>
         </div>
       }

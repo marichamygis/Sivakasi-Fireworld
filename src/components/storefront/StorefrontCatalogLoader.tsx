@@ -1,53 +1,63 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, Flame } from 'lucide-react';
+import Image from 'next/image';
+import { Sparkles, Flame, Factory } from 'lucide-react';
 
 export const StorefrontCatalogLoader: React.FC = () => {
   return (
-    <div className="space-y-4 font-sans animate-in fade-in duration-200">
+    <div className="space-y-4 font-sans animate-in fade-in duration-300">
       {/* 1. ANIMATED BRAND EMBLEM CARD */}
-      <div className="bg-white rounded-3xl border border-amber-500/20 p-8 sm:p-10 text-center shadow-2xs relative overflow-hidden">
+      <div className="bg-white rounded-3xl border border-amber-500/20 p-6 sm:p-10 text-center shadow-md relative overflow-hidden">
         {/* Ambient background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-tr from-amber-500/10 via-orange-500/10 to-rose-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-tr from-amber-500/15 via-orange-500/15 to-rose-500/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col items-center justify-center">
-          {/* Glowing Animated Emblem */}
-          <div className="relative w-20 h-20 sm:w-24 sm:h-24 mb-4 flex items-center justify-center">
-            {/* Outer spinning ring with gradient */}
-            <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-amber-500 border-r-rose-500 border-b-amber-400 animate-spin" />
-            
-            {/* Inner logo badge circle */}
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white border-2 border-amber-400 flex items-center justify-center shadow-lg shadow-amber-500/20">
-              <img
+          {/* Main Logo Container with Ambient Glow */}
+          <div className="relative mb-5 flex flex-col items-center justify-center">
+            {/* Ambient Pulsing Halo */}
+            <div className="absolute -inset-3 bg-gradient-to-r from-amber-400/25 via-red-500/25 to-amber-500/25 rounded-3xl blur-xl animate-pulse pointer-events-none" />
+
+            {/* Logo Card with Badges */}
+            <div className="relative bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-2 border-amber-300/80 shadow-xl shadow-amber-500/10 flex items-center justify-center transform transition-transform duration-500 hover:scale-105">
+              <Image
                 src="/logo.png"
-                alt="Sivakasi Fireworld"
-                className="w-10 h-10 sm:w-11 sm:h-11 object-contain drop-shadow-xs"
+                alt="Sivakasi Fireworld Logo"
+                width={280}
+                height={180}
+                priority
+                className="h-16 sm:h-24 w-auto max-w-[200px] sm:max-w-[300px] object-contain drop-shadow-md"
               />
-            </div>
 
-            {/* Sparkle badge */}
-            <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shadow-xs animate-bounce">
-              <Sparkles className="w-3.5 h-3.5 fill-slate-950" />
-            </div>
+              {/* Sparkle badge */}
+              <div className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shadow-md animate-bounce">
+                <Sparkles className="w-4 h-4 fill-slate-950" />
+              </div>
 
-            {/* Flame badge */}
-            <div className="absolute -bottom-1 -left-1 w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center shadow-xs animate-pulse">
-              <Flame className="w-3.5 h-3.5 fill-white" />
+              {/* Flame badge */}
+              <div className="absolute -bottom-2.5 -left-2.5 w-7 h-7 rounded-full bg-red-600 text-white flex items-center justify-center shadow-md animate-pulse">
+                <Flame className="w-4 h-4 fill-white" />
+              </div>
             </div>
           </div>
 
           {/* Heading & Subtext */}
-          <h3 className="text-base sm:text-lg font-black text-slate-950 font-heading tracking-tight mb-1">
-            Loading Fireworks Catalog...
-          </h3>
-          <p className="text-xs text-slate-500 font-medium max-w-sm mb-4">
-            Fetching direct factory wholesale rates &amp; live cracker inventory from Sivakasi
-          </p>
+          <div className="space-y-1 max-w-md mx-auto mb-4">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100/80 text-amber-900 border border-amber-300/80 text-[11px] font-black uppercase tracking-wider mb-1">
+              <Factory className="w-3.5 h-3.5 text-amber-700" />
+              <span>Direct Factory Wholesale</span>
+            </div>
+            <h3 className="text-base sm:text-xl font-black text-slate-900 font-heading tracking-tight">
+              Loading Fireworks Catalog...
+            </h3>
+            <p className="text-xs text-slate-500 font-medium leading-relaxed">
+              Fetching direct factory wholesale rates &amp; 2026 fresh cracker inventory from Sivakasi
+            </p>
+          </div>
 
           {/* Sleek Animated Progress Bar */}
-          <div className="w-48 sm:w-60 h-1.5 bg-slate-100 rounded-full overflow-hidden relative shadow-inner">
-            <div className="absolute inset-y-0 bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500 rounded-full w-3/4 animate-pulse" />
+          <div className="w-56 sm:w-72 h-2 bg-slate-100 rounded-full overflow-hidden relative shadow-inner border border-slate-200/60">
+            <div className="absolute inset-y-0 bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500 rounded-full w-4/5 animate-pulse" />
           </div>
         </div>
       </div>

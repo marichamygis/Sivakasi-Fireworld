@@ -51,14 +51,8 @@ export default function StorefrontPage() {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Instant render: If cached products exist, don't block with loading screen
-  const [pageLoading, setPageLoading] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      const cached = ProductService.getCachedProducts();
-      return !cached || cached.length === 0;
-    }
-    return true;
-  });
+  // Brand loading state at startup to showcase Sivakasi Fireworld logo
+  const [pageLoading, setPageLoading] = useState<boolean>(true);
 
   useEffect(() => {
     let isMounted = true;
@@ -79,7 +73,12 @@ export default function StorefrontPage() {
         console.error('Failed to load DB catalog', e);
       } finally {
         if (isMounted) {
-          setPageLoading(false);
+          // Smooth transition so the brand logo is cleanly appreciated on initial startup
+          setTimeout(() => {
+            if (isMounted) {
+              setPageLoading(false);
+            }
+          }, 400);
         }
       }
     }

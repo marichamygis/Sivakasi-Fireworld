@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import confetti from 'canvas-confetti';
 import { CheckCircle2, Package, ArrowRight, Truck, MapPin, Calendar, Clock, ShoppingBag, Ban, AlertCircle, Printer } from 'lucide-react';
@@ -53,10 +54,24 @@ export default function OrderConfirmationPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div className="text-center space-y-3">
-          <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-xs font-bold text-slate-600">Retrieving Order Details...</p>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans">
+        <div className="text-center space-y-4 max-w-sm">
+          <div className="relative inline-block">
+            <div className="p-4 bg-white rounded-2xl border border-amber-300 shadow-md">
+              <Image
+                src="/logo.png"
+                alt="Sivakasi Fireworld"
+                width={160}
+                height={100}
+                priority
+                className="h-14 w-auto object-contain animate-pulse"
+              />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <p className="text-xs font-bold text-slate-800">Retrieving Order Details...</p>
+            <p className="text-[11px] text-slate-500">Checking order status &amp; invoice from Sivakasi Fireworld</p>
+          </div>
         </div>
       </div>
     );
