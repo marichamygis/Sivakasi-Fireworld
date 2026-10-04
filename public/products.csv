@@ -1,0 +1,167 @@
+name,sku,pack_size,mrp,selling_price,sound_level,stock,category,description
+"2 3/4"" Kuruvi",ID-001,5 Pcs,80.00,8.00,,,ONE SOUND CRACKERS,"2 3/4"" Kuruvi - Authentic Sivakasi Fireworks."
+"3 1/2"" Lakshmi",ID-002,5 Pcs,110.00,11.00,,,ONE SOUND CRACKERS,"3 1/2"" Lakshmi - Authentic Sivakasi Fireworks."
+"4"" Lakshmi",ID-003,5 Pcs,190.00,19.00,,,ONE SOUND CRACKERS,"4"" Lakshmi - Authentic Sivakasi Fireworks."
+"4"" Deluxe Lakshmi",ID-004,5 Pcs,250.00,25.00,,,ONE SOUND CRACKERS,"4"" Deluxe Lakshmi - Authentic Sivakasi Fireworks."
+"4"" Gold Lakshmi",ID-005,5 Pcs,300.00,30.00,,,ONE SOUND CRACKERS,"4"" Gold Lakshmi - Authentic Sivakasi Fireworks."
+"5"" Deluxe Lakshmi",ID-006,5 Pcs,430.00,43.00,,,ONE SOUND CRACKERS,"5"" Deluxe Lakshmi - Authentic Sivakasi Fireworks."
+"6"" Deluxe Lakshmi/Jallikattu",ID-007,5 Pcs,660.00,66.00,,,ONE SOUND CRACKERS,"6"" Deluxe Lakshmi/Jallikattu - Authentic Sivakasi Fireworks."
+Two Sound Crackers,ID-008,5 Pcs,350.00,35.00,,,ONE SOUND CRACKERS,Two Sound Crackers - Authentic Sivakasi Fireworks.
+Flower Pots Special,ID-009,10 Pcs,800.00,80.00,,,FLOWER POTS,Flower Pots Special - Authentic Sivakasi Fireworks.
+Flower Pots Ashoka,ID-010,10 Pcs,1200.00,120.00,,,FLOWER POTS,Flower Pots Ashoka - Authentic Sivakasi Fireworks.
+Flower Pots Deluxe,ID-011,5 Pcs,2200.00,220.00,,,FLOWER POTS,Flower Pots Deluxe - Authentic Sivakasi Fireworks.
+Flower Pots Color Koti Dix,ID-012,10 Pcs,1900.00,190.00,,,FLOWER POTS,Flower Pots Color Koti Dix - Authentic Sivakasi Fireworks.
+Ground Chakkar Big,ID-013,25 Pcs,800.00,80.00,,,GROUND CHAKKAR,Ground Chakkar Big - Authentic Sivakasi Fireworks.
+Ground Chakkar Big,ID-014,10 Pcs,400.00,40.00,,,GROUND CHAKKAR,Ground Chakkar Big - Authentic Sivakasi Fireworks.
+Ground Chakkar Special,ID-015,10 Pcs,800.00,80.00,,,GROUND CHAKKAR,Ground Chakkar Special - Authentic Sivakasi Fireworks.
+Ground Chakkar Deluxe,ID-016,10 Pcs,1400.00,140.00,,,GROUND CHAKKAR,Ground Chakkar Deluxe - Authentic Sivakasi Fireworks.
+Ground Chakkar Disco Wheel,ID-017,5 Pcs,1200.00,120.00,,,GROUND CHAKKAR,Ground Chakkar Disco Wheel - Authentic Sivakasi Fireworks.
+Wire Chakkar,ID-018,10 Pcs,1600.00,160.00,,,GROUND CHAKKAR,Wire Chakkar - Authentic Sivakasi Fireworks.
+Moon Wheel,ID-019,10 Pcs,2000.00,200.00,,,GROUND CHAKKAR,Moon Wheel - Authentic Sivakasi Fireworks.
+"1 1/2"" Twinkling Star",ID-020,10 Pcs,250.00,25.00,,,TWINKLING STARS & PENCILS,"1 1/2"" Twinkling Star - Authentic Sivakasi Fireworks."
+"4"" Twinkling Star",ID-021,10 Pcs,700.00,70.00,,,TWINKLING STARS & PENCILS,"4"" Twinkling Star - Authentic Sivakasi Fireworks."
+"10"" Pencil",ID-022,10 Pcs,400.00,40.00,,,TWINKLING STARS & PENCILS,"10"" Pencil - Authentic Sivakasi Fireworks."
+"12"" Pencil",ID-023,10 Pcs,530.00,53.00,,,TWINKLING STARS & PENCILS,"12"" Pencil - Authentic Sivakasi Fireworks."
+"15"" Pencil",ID-024,10 Pcs,800.00,80.00,,,TWINKLING STARS & PENCILS,"15"" Pencil - Authentic Sivakasi Fireworks."
+"18"" Pencil",ID-025,10 Pcs,900.00,90.00,,,TWINKLING STARS & PENCILS,"18"" Pencil - Authentic Sivakasi Fireworks."
+Rocket Bomb/Colour Rocket,ID-026,10 Pcs,700.00,70.00,,,ROCKETS,Rocket Bomb/Colour Rocket - Authentic Sivakasi Fireworks.
+Whistling Rocket,ID-027,10 Pcs,1800.00,180.00,,,ROCKETS,Whistling Rocket - Authentic Sivakasi Fireworks.
+Lunik Rocket,ID-028,10 Pcs,1400.00,140.00,,,ROCKETS,Lunik Rocket - Authentic Sivakasi Fireworks.
+2 Sound Rocket,ID-029,10 Pcs,1600.00,160.00,,,ROCKETS,2 Sound Rocket - Authentic Sivakasi Fireworks.
+3 Sound Rocket,ID-030,10 Pcs,1800.00,180.00,,,ROCKETS,3 Sound Rocket - Authentic Sivakasi Fireworks.
+Bullet Bomb/Super Bullet,ID-031,10 Pcs,300.00,30.00,,,BOMBS,Bullet Bomb/Super Bullet - Authentic Sivakasi Fireworks.
+Hydro Bomb,ID-032,10 Pcs,700.00,70.00,,,BOMBS,Hydro Bomb - Authentic Sivakasi Fireworks.
+King Kong Bomb,ID-033,10 Pcs,900.00,90.00,,,BOMBS,King Kong Bomb - Authentic Sivakasi Fireworks.
+Classic Bomb,ID-034,10 Pcs,1200.00,120.00,,,BOMBS,Classic Bomb - Authentic Sivakasi Fireworks.
+Dinosaur Bomb,ID-035,10 Pcs,2200.00,220.00,,,BOMBS,Dinosaur Bomb - Authentic Sivakasi Fireworks.
+Digital Bomb,ID-036,10 Pcs,2500.00,250.00,,,BOMBS,Digital Bomb - Authentic Sivakasi Fireworks.
+555 Bomb,ID-037,10 Pcs,1600.00,160.00,,,BOMBS,555 Bomb - Authentic Sivakasi Fireworks.
+1/4 Kg Paper Bomb,ID-038,1 Pce,450.00,45.00,,,BOMBS,1/4 Kg Paper Bomb - Authentic Sivakasi Fireworks.
+1/2 Kg Paper Bomb,ID-039,1 Pce,900.00,90.00,,,BOMBS,1/2 Kg Paper Bomb - Authentic Sivakasi Fireworks.
+1 Kg Paper Bomb,ID-040,1 Pce,1800.00,180.00,,,BOMBS,1 Kg Paper Bomb - Authentic Sivakasi Fireworks.
+Red Bijili,ID-041,100 Pcs,330.00,33.00,,,BIJILI CRACKERS,Red Bijili - Authentic Sivakasi Fireworks.
+Stripped Bijili,ID-042,100 Pcs,350.00,35.00,,,BIJILI CRACKERS,Stripped Bijili - Authentic Sivakasi Fireworks.
+Butterfly,ID-043,10 Pcs,900.00,90.00,,,FOUNTAIN & VARIETIES,Butterfly - Authentic Sivakasi Fireworks.
+Mega Siren,ID-044,3 Pcs,1800.00,180.00,,,FOUNTAIN & VARIETIES,Mega Siren - Authentic Sivakasi Fireworks.
+Shower,ID-045,5 Pcs,1200.00,120.00,,,FOUNTAIN & VARIETIES,Shower - Authentic Sivakasi Fireworks.
+Tri Colour Fountain,ID-046,5 Pcs,2500.00,250.00,,,FOUNTAIN & VARIETIES,Tri Colour Fountain - Authentic Sivakasi Fireworks.
+Kit Kat/Chit Phut/TitTak,ID-047,10 Pcs,400.00,40.00,,,FOUNTAIN & VARIETIES,Kit Kat/Chit Phut/TitTak - Authentic Sivakasi Fireworks.
+Photo Flash,ID-048,5 Pcs,700.00,70.00,,,FOUNTAIN & VARIETIES,Photo Flash - Authentic Sivakasi Fireworks.
+Peacock,ID-049,1 Pce,1600.00,160.00,,,FOUNTAIN & VARIETIES,Peacock - Authentic Sivakasi Fireworks.
+Helicopter,ID-050,5 Pcs,1000.00,100.00,,,FOUNTAIN & VARIETIES,Helicopter - Authentic Sivakasi Fireworks.
+Drone,ID-051,5 Pcs,1600.00,160.00,,,FOUNTAIN & VARIETIES,Drone - Authentic Sivakasi Fireworks.
+Tin Beer,ID-052,1 Pce,1200.00,120.00,,,FOUNTAIN & VARIETIES,Tin Beer - Authentic Sivakasi Fireworks.
+Peacock Feather,ID-053,5 Pcs,1000.00,100.00,,,FOUNTAIN & VARIETIES,Peacock Feather - Authentic Sivakasi Fireworks.
+Golden Rain,ID-054,5 Pcs,1000.00,100.00,,,FOUNTAIN & VARIETIES,Golden Rain - Authentic Sivakasi Fireworks.
+Crorepati / Jockpot,ID-055,2 Pcs,2200.00,220.00,,,FOUNTAIN & VARIETIES,Crorepati / Jockpot - Authentic Sivakasi Fireworks.
+Rainbow Smoke,ID-056,3 Pcs,1500.00,150.00,,,FOUNTAIN & VARIETIES,Rainbow Smoke - Authentic Sivakasi Fireworks.
+Bambaram,ID-057,10 Pcs,1200.00,120.00,,,FOUNTAIN & VARIETIES,Bambaram - Authentic Sivakasi Fireworks.
+Black Money,ID-058,5 Pcs,2200.00,220.00,,,FOUNTAIN & VARIETIES,Black Money - Authentic Sivakasi Fireworks.
+Lollipop (Stick),ID-059,5 Pcs,1700.00,170.00,,,FOUNTAIN & VARIETIES,Lollipop (Stick) - Authentic Sivakasi Fireworks.
+Pada Peacock,ID-060,1 Pce,4000.00,400.00,,,FOUNTAIN & VARIETIES,Pada Peacock - Authentic Sivakasi Fireworks.
+90 Watts,ID-061,3 Pcs,1200.00,120.00,,,FOUNTAIN & VARIETIES,90 Watts - Authentic Sivakasi Fireworks.
+Chotta Fancy,ID-062,1 Box,400.00,40.00,,,FANCY CRACKERS,Chotta Fancy - Authentic Sivakasi Fireworks.
+"2"" Pipe (5 Varieties)",ID-063,1 Pce,1200.00,120.00,,,FANCY CRACKERS,"2"" Pipe (5 Varieties) - Authentic Sivakasi Fireworks."
+"2"" Pipe",ID-064,3 Pcs,2800.00,280.00,,,FANCY CRACKERS,"2"" Pipe - Authentic Sivakasi Fireworks."
+"3"" Pipe (6 Varieties)",ID-065,1 Pce,2400.00,240.00,,,FANCY CRACKERS,"3"" Pipe (6 Varieties) - Authentic Sivakasi Fireworks."
+"3 1/2"" Pipe (5 Varieties)",ID-066,1 Pce,3000.00,300.00,,,FANCY CRACKERS,"3 1/2"" Pipe (5 Varieties) - Authentic Sivakasi Fireworks."
+"4"" Pipe (5 Varieties)",ID-067,1 Pce,3500.00,350.00,,,FANCY CRACKERS,"4"" Pipe (5 Varieties) - Authentic Sivakasi Fireworks."
+"4"" Pipe NayagraFalls (Spl)",ID-068,1 Pce,4000.00,400.00,,,FANCY CRACKERS,"4"" Pipe NayagraFalls (Spl) - Authentic Sivakasi Fireworks."
+"4"" 7 Steps",ID-069,1 Pce,4300.00,430.00,,,FANCY CRACKERS,"4"" 7 Steps - Authentic Sivakasi Fireworks."
+"4"" 12 Steps",ID-070,1 Pce,4800.00,480.00,,,FANCY CRACKERS,"4"" 12 Steps - Authentic Sivakasi Fireworks."
+"4"" Pipe",ID-071,2 Pcs,9000.00,900.00,,,FANCY CRACKERS,"4"" Pipe - Authentic Sivakasi Fireworks."
+"5"" Pipe Orange",ID-072,1 Pc,5300.00,530.00,,,FANCY CRACKERS,"5"" Pipe Orange - Authentic Sivakasi Fireworks."
+"5"" Pipe Lemon",ID-073,1 Pc,5300.00,530.00,,,FANCY CRACKERS,"5"" Pipe Lemon - Authentic Sivakasi Fireworks."
+"5"" Pipe Purble",ID-074,1 Pc,5300.00,530.00,,,FANCY CRACKERS,"5"" Pipe Purble - Authentic Sivakasi Fireworks."
+"5"" Pipe",ID-075,2 Pcs,10000.00,1000.00,,,FANCY CRACKERS,"5"" Pipe - Authentic Sivakasi Fireworks."
+Cool Baby Cool,ID-076,5 Pcs,2000.00,200.00,,,FANCY CRACKERS,Cool Baby Cool - Authentic Sivakasi Fireworks.
+7 Shots Multicolour,ID-077,5 Pcs,1100.00,110.00,,,FANCY CRACKERS,7 Shots Multicolour - Authentic Sivakasi Fireworks.
+12 Shots Rider / Crackling,ID-078,1 Box,1400.00,140.00,,,FANCY CRACKERS,12 Shots Rider / Crackling - Authentic Sivakasi Fireworks.
+25 Shots Rider / Crackling,ID-079,1 Box,2500.00,250.00,,,FANCY CRACKERS,25 Shots Rider / Crackling - Authentic Sivakasi Fireworks.
+30 Shots Multicolour,ID-080,1 Box,3500.00,350.00,,,SILVER,30 Shots Multicolour - Authentic Sivakasi Fireworks.
+60 Shots Multicolour,ID-081,1 Box,7000.00,700.00,,,SILVER,60 Shots Multicolour - Authentic Sivakasi Fireworks.
+120 Shots Multicolour,ID-082,1 Box,14000.00,1400.00,,,SILVER,120 Shots Multicolour - Authentic Sivakasi Fireworks.
+30 Shots Multicolour,ID-083,1 Box,4000.00,400.00,,,GOLD,30 Shots Multicolour - Authentic Sivakasi Fireworks.
+60 Shots Multicolour,ID-084,1 Box,8000.00,800.00,,,GOLD,60 Shots Multicolour - Authentic Sivakasi Fireworks.
+120 Shots Multicolour,ID-085,1 Box,16000.00,1600.00,,,GOLD,120 Shots Multicolour - Authentic Sivakasi Fireworks.
+240 Shots Multicolour,ID-086,1 Box,32000.00,3200.00,,,GOLD,240 Shots Multicolour - Authentic Sivakasi Fireworks.
+Money Penny (Standard FW),ID-087,5 Pcs,3550.00,355.00,,,WOW COLLECTION,Money Penny (Standard FW) - Authentic Sivakasi Fireworks.
+Sun Drops (Standard FW),ID-088,5 Pcs,3550.00,355.00,,,WOW COLLECTION,Sun Drops (Standard FW) - Authentic Sivakasi Fireworks.
+Twin Spin (Standard FW),ID-089,5 Pcs,1550.00,155.00,,,WOW COLLECTION,Twin Spin (Standard FW) - Authentic Sivakasi Fireworks.
+Scarlet Saucer (Standard FW),ID-090,5 Pcs,1550.00,155.00,,,WOW COLLECTION,Scarlet Saucer (Standard FW) - Authentic Sivakasi Fireworks.
+Red & White Chakkar's (Standard FW),ID-091,10 Pcs,880.00,88.00,,,WOW COLLECTION,Red & White Chakkar's (Standard FW) - Authentic Sivakasi Fireworks.
+Colour Burst (Standard FW),ID-092,10 Pcs,2440.00,244.00,,,WOW COLLECTION,Colour Burst (Standard FW) - Authentic Sivakasi Fireworks.
+Whistling Dixie (Vadivel FW),ID-093,5 Pcs,1200.00,120.00,,,WOW COLLECTION,Whistling Dixie (Vadivel FW) - Authentic Sivakasi Fireworks.
+Ring Ring (Vadivel FW),ID-094,5 Pcs,2000.00,200.00,,,WOW COLLECTION,Ring Ring (Vadivel FW) - Authentic Sivakasi Fireworks.
+Bad Boy (Vadivel FW),ID-095,3 Pcs,3300.00,330.00,,,WOW COLLECTION,Bad Boy (Vadivel FW) - Authentic Sivakasi Fireworks.
+Autumn Rain (Vadivel FW),ID-096,1 Pce,1400.00,140.00,,,WOW COLLECTION,Autumn Rain (Vadivel FW) - Authentic Sivakasi Fireworks.
+Winter Rain (Vadivel FW),ID-097,1 Pce,1400.00,140.00,,,WOW COLLECTION,Winter Rain (Vadivel FW) - Authentic Sivakasi Fireworks.
+Scooby-Doo (Vadivel FW),ID-098,5 Pcs,1600.00,160.00,,,WOW COLLECTION,Scooby-Doo (Vadivel FW) - Authentic Sivakasi Fireworks.
+Dexter (Vadivel FW),ID-099,5 Pcs,1600.00,160.00,,,WOW COLLECTION,Dexter (Vadivel FW) - Authentic Sivakasi Fireworks.
+Popeye (Vadivel FW),ID-100,5 Pcs,1600.00,160.00,,,WOW COLLECTION,Popeye (Vadivel FW) - Authentic Sivakasi Fireworks.
+Power Puff Girls (Vadivel FW),ID-101,5 Pcs,1600.00,160.00,,,WOW COLLECTION,Power Puff Girls (Vadivel FW) - Authentic Sivakasi Fireworks.
+Recycle (Vadivel FW),ID-102,5 Pcs,2000.00,200.00,,,WOW COLLECTION,Recycle (Vadivel FW) - Authentic Sivakasi Fireworks.
+Fire Egg (Vadivel FW),ID-103,2 Pcs,1800.00,180.00,,,WOW COLLECTION,Fire Egg (Vadivel FW) - Authentic Sivakasi Fireworks.
+Rangoon (Ajantha FW),ID-104,2 Pcs,2500.00,250.00,,,WOW COLLECTION,Rangoon (Ajantha FW) - Authentic Sivakasi Fireworks.
+Magical Sword (Ajantha FW),ID-105,2 Pcs,3200.00,320.00,,,WOW COLLECTION,Magical Sword (Ajantha FW) - Authentic Sivakasi Fireworks.
+Galaxy sword (Ajantha FW),ID-106,2 Pcs,3200.00,320.00,,,WOW COLLECTION,Galaxy sword (Ajantha FW) - Authentic Sivakasi Fireworks.
+Mitico (Ajantha FW),ID-107,2 Pcs,2200.00,220.00,,,WOW COLLECTION,Mitico (Ajantha FW) - Authentic Sivakasi Fireworks.
+Tropical Mushroom (Ajantha FW),ID-108,1 Pc,2500.00,250.00,,,WOW COLLECTION,Tropical Mushroom (Ajantha FW) - Authentic Sivakasi Fireworks.
+Smiling Elephant (Ajantha FW),ID-109,1 Pc,3350.00,335.00,,,WOW COLLECTION,Smiling Elephant (Ajantha FW) - Authentic Sivakasi Fireworks.
+Lucky Lion (Ajantha FW),ID-110,1 Pc,3350.00,335.00,,,WOW COLLECTION,Lucky Lion (Ajantha FW) - Authentic Sivakasi Fireworks.
+Lemon Tree (Ayyan FW),ID-111,1 Pce,1450.00,145.00,,,WOW COLLECTION,Lemon Tree (Ayyan FW) - Authentic Sivakasi Fireworks.
+Cocktail (Ayyan FW),ID-112,10 Pcs,650.00,65.00,,,WOW COLLECTION,Cocktail (Ayyan FW) - Authentic Sivakasi Fireworks.
+Jadugar (Ayyan FW),ID-113,5 Pcs,3350.00,335.00,,,WOW COLLECTION,Jadugar (Ayyan FW) - Authentic Sivakasi Fireworks.
+ManoRajan (Ayyan FW),ID-114,5 Pcs,3350.00,335.00,,,WOW COLLECTION,ManoRajan (Ayyan FW) - Authentic Sivakasi Fireworks.
+Dix Pots,ID-115,5 Pcs,2500.00,250.00,,,WOW COLLECTION,Dix Pots - Authentic Sivakasi Fireworks.
+Kit Kat (Red),ID-116,5 Pcs,1750.00,175.00,,,WOW COLLECTION,Kit Kat (Red) - Authentic Sivakasi Fireworks.
+Tic Tac Mint,ID-117,5 Pcs,1750.00,175.00,,,WOW COLLECTION,Tic Tac Mint - Authentic Sivakasi Fireworks.
+Milky Bar White,ID-118,5 Pcs,1750.00,175.00,,,WOW COLLECTION,Milky Bar White - Authentic Sivakasi Fireworks.
+5 Star Gold,ID-119,5 Pcs,1750.00,175.00,,,WOW COLLECTION,5 Star Gold - Authentic Sivakasi Fireworks.
+Dairy Milk,ID-120,5 Pcs,1750.00,175.00,,,WOW COLLECTION,Dairy Milk - Authentic Sivakasi Fireworks.
+Germs Colour Mix,ID-121,5 Pcs,1750.00,175.00,,,WOW COLLECTION,Germs Colour Mix - Authentic Sivakasi Fireworks.
+Karaoke Night,ID-122,1 Pc,1450.00,165.00,,,WOW COLLECTION,Karaoke Night - Authentic Sivakasi Fireworks.
+Jazz Music,ID-123,1 Pc,1650.00,165.00,,,WOW COLLECTION,Jazz Music - Authentic Sivakasi Fireworks.
+Dr.Pepper,ID-124,1 Pc,1650.00,165.00,,,WOW COLLECTION,Dr.Pepper - Authentic Sivakasi Fireworks.
+Big Bang,ID-125,1 Pc,1650.00,165.00,,,WOW COLLECTION,Big Bang - Authentic Sivakasi Fireworks.
+Red Apple,ID-126,5 Pcs,1700.00,170.00,,,WOW COLLECTION,Red Apple - Authentic Sivakasi Fireworks.
+Carnival Fun Fait,ID-127,5 Pcs,1700.00,170.00,,,WOW COLLECTION,Carnival Fun Fait - Authentic Sivakasi Fireworks.
+Mr.Big,ID-128,5 Pcs,1700.00,170.00,,,WOW COLLECTION,Mr.Big - Authentic Sivakasi Fireworks.
+Tooty Frootiy,ID-129,5 Pcs,1700.00,170.00,,,WOW COLLECTION,Tooty Frootiy - Authentic Sivakasi Fireworks.
+Bingo Music,ID-130,5 Pcs,1700.00,170.00,,,WOW COLLECTION,Bingo Music - Authentic Sivakasi Fireworks.
+Party Time,ID-131,5 Pcs,1700.00,170.00,,,WOW COLLECTION,Party Time - Authentic Sivakasi Fireworks.
+Kulfi,ID-132,3 Pcs,2450.00,245.00,,,WOW COLLECTION,Kulfi - Authentic Sivakasi Fireworks.
+Hot Cone,ID-133,2 Pcs,2200.00,220.00,,,WOW COLLECTION,Hot Cone - Authentic Sivakasi Fireworks.
+King Version,ID-134,1 Pc,2200.00,220.00,,,WOW COLLECTION,King Version - Authentic Sivakasi Fireworks.
+Cylinder Smoke,ID-135,2 Pcs,2555.00,256.00,,,WOW COLLECTION,Cylinder Smoke - Authentic Sivakasi Fireworks.
+7 Cm Electric Sparklers,ID-136,1 Box,90.00,9.00,,,SPARKLERS,7 Cm Electric Sparklers - Authentic Sivakasi Fireworks.
+7 Cm Colour Sparklers,ID-137,1 Box,110.00,11.00,,,SPARKLERS,7 Cm Colour Sparklers - Authentic Sivakasi Fireworks.
+7 Cm Green Sparklers,ID-138,1 Box,130.00,13.00,,,SPARKLERS,7 Cm Green Sparklers - Authentic Sivakasi Fireworks.
+10 Cm Electric Sparklers,ID-139,1 Box,180.00,18.00,,,SPARKLERS,10 Cm Electric Sparklers - Authentic Sivakasi Fireworks.
+10 Cm Colour Sparklers,ID-140,1 Box,210.00,21.00,,,SPARKLERS,10 Cm Colour Sparklers - Authentic Sivakasi Fireworks.
+10 Cm Green Sparklers,ID-141,1 Box,240.00,24.00,,,SPARKLERS,10 Cm Green Sparklers - Authentic Sivakasi Fireworks.
+12 Cm Electric Sparklers,ID-142,1 Box,270.00,27.00,,,SPARKLERS,12 Cm Electric Sparklers - Authentic Sivakasi Fireworks.
+12 Cm Colour Sparklers,ID-143,1 Box,300.00,30.00,,,SPARKLERS,12 Cm Colour Sparklers - Authentic Sivakasi Fireworks.
+12 Cm Green Sparklers,ID-144,1 Box,340.00,34.00,,,SPARKLERS,12 Cm Green Sparklers - Authentic Sivakasi Fireworks.
+15 Cm Electric Sparklers,ID-145,1 Box,430.00,43.00,,,SPARKLERS,15 Cm Electric Sparklers - Authentic Sivakasi Fireworks.
+15 Cm Colour Sparklers,ID-146,1 Box,450.00,45.00,,,SPARKLERS,15 Cm Colour Sparklers - Authentic Sivakasi Fireworks.
+15 Cm Green Sparklers,ID-147,1 Box,470.00,47.00,,,SPARKLERS,15 Cm Green Sparklers - Authentic Sivakasi Fireworks.
+30 Cm Electric Sparklers,ID-148,1 Box,430.00,43.00,,,SPARKLERS,30 Cm Electric Sparklers - Authentic Sivakasi Fireworks.
+30 Cm Colour Sparklers,ID-149,1 Box,450.00,45.00,,,SPARKLERS,30 Cm Colour Sparklers - Authentic Sivakasi Fireworks.
+30 Cm Green Sparklers,ID-150,1 Box,470.00,47.00,,,SPARKLERS,30 Cm Green Sparklers - Authentic Sivakasi Fireworks.
+50 Cm Electric Sparklers,ID-151,1 Box,1600.00,160.00,,,SPARKLERS,50 Cm Electric Sparklers - Authentic Sivakasi Fireworks.
+50 Cm Colour Sparklers,ID-152,1 Box,1800.00,180.00,,,SPARKLERS,50 Cm Colour Sparklers - Authentic Sivakasi Fireworks.
+Rotating Umbrella Sparklers,ID-153,1 Box,2000.00,200.00,,,SPARKLERS,Rotating Umbrella Sparklers - Authentic Sivakasi Fireworks.
+Colour Matches,ID-154,1 Box,1500.00,150.00,,,COLOUR MATCHES,Colour Matches - Authentic Sivakasi Fireworks.
+Colour Matches (Deluxe),ID-155,1 Box,2000.00,200.00,,,COLOUR MATCHES,Colour Matches (Deluxe) - Authentic Sivakasi Fireworks.
+Colour Matches 10 In 1(Big),ID-156,1 Box,2500.00,250.00,,,COLOUR MATCHES,Colour Matches 10 In 1(Big) - Authentic Sivakasi Fireworks.
+Hunter Gun(with) Ring Caps,ID-157,1 Box,1500.00,150.00,,,COLOUR MATCHES,Hunter Gun(with) Ring Caps - Authentic Sivakasi Fireworks.
+Snake Serpent (Big),ID-158,1 Box,1000.00,100.00,,,COLOUR MATCHES,Snake Serpent (Big) - Authentic Sivakasi Fireworks.
+Electric Stone/Magic Pops,ID-159,1 Box,100.00,10.00,,,COLOUR MATCHES,Electric Stone/Magic Pops - Authentic Sivakasi Fireworks.
+Cartoon,ID-160,25 Pcs,700.00,70.00,,,COLOUR MATCHES,Cartoon - Authentic Sivakasi Fireworks.
+Darling Pack 20 Items,ID-161,1 Box,330.00,330.00,,,GIFT BOXES,Darling Pack 20 Items - Authentic Sivakasi Fireworks.
+Family Pack 25 Items,ID-162,1 Box,400.00,400.00,,,GIFT BOXES,Family Pack 25 Items - Authentic Sivakasi Fireworks.
+Golden Pack 30 Items,ID-163,1 Box,450.00,450.00,,,GIFT BOXES,Golden Pack 30 Items - Authentic Sivakasi Fireworks.
+V.I.P. Pack 35 Items,ID-164,1 Box,530.00,530.00,,,GIFT BOXES,V.I.P. Pack 35 Items - Authentic Sivakasi Fireworks.
+Premium Pack 42 Items,ID-165,1 Box,830.00,830.00,,,GIFT BOXES,Premium Pack 42 Items - Authentic Sivakasi Fireworks.
+Diwali Special Pack 50 Items,ID-166,1 Box,1000.00,1000.00,,,GIFT BOXES,Diwali Special Pack 50 Items - Authentic Sivakasi Fireworks.
