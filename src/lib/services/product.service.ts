@@ -332,26 +332,33 @@ export class ProductService {
 
       if (error || !data) return [];
 
-      const mapped: Product[] = data.map((item: any) => ({
-        id: item.id,
-        category_id: item.category_id,
-        name: item.name,
-        slug: item.slug,
-        sku: item.sku,
-        description: item.description || `${item.name} - Authentic Sivakasi Fireworks.`,
-        pack_size: item.pack_size,
-        mrp: Number(item.mrp),
-        selling_price: Number(item.selling_price),
-        image_url: item.image_url,
-        is_active: item.is_active,
-        is_featured: item.is_featured,
-        is_best_seller: item.is_best_seller,
-        sound_level: item.sound_level,
-        stock: item.stock ?? 100,
-        category: item.category,
-      }));
+      const mapped: Product[] = data.map((item: any) => {
+        const mrp = Number(item.mrp) || 0;
+        let selling_price = Number(item.selling_price);
+        if (isNaN(selling_price) || selling_price <= 0) {
+          selling_price = Math.round(mrp * 0.20);
+        }
+        return {
+          id: item.id,
+          category_id: item.category_id,
+          name: item.name,
+          slug: item.slug,
+          sku: item.sku,
+          description: item.description || `${item.name} - Authentic Sivakasi Fireworks.`,
+          pack_size: item.pack_size,
+          mrp,
+          selling_price,
+          image_url: item.image_url,
+          is_active: item.is_active,
+          is_featured: item.is_featured,
+          is_best_seller: item.is_best_seller,
+          sound_level: item.sound_level,
+          stock: item.stock ?? 100,
+          category: item.category,
+        };
+      });
 
-      localCache.set('products_all', mapped, 10 * 60 * 1000); // 10 min TTL
+      localCache.set('products_all', mapped, 2 * 60 * 1000); // 2 min TTL for ultra-fast price reflection
       return mapped;
     } catch (e) {
       console.warn('Failed to fetch products from Supabase:', e);

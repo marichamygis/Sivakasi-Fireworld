@@ -154,7 +154,7 @@ export class SettingsService {
         hero_banner_link_url: settingsMap['hero_banner_link_url'] || DEFAULT_SETTINGS.hero_banner_link_url,
       };
 
-      localCache.set('store_settings', settings, 10 * 60 * 1000); // 10 min TTL
+      localCache.set('store_settings', settings, 2 * 60 * 1000); // 2 min TTL for live settings sync
       return settings;
     } catch (e) {
       console.warn('Settings fetch exception, using defaults:', e);
@@ -229,9 +229,14 @@ export class SettingsService {
 
   /**
    * Save active global discount percentage directly.
+   * Instantly clears both settings and product catalog caches so new prices reflect immediately.
    */
   static async updateDiscountPercentage(percent: number): Promise<boolean> {
-    return this.saveSetting('discount_percentage', String(percent));
+    const res = await this.saveSetting('discount_percentage', String(percent));
+    localCache.clear('products_all');
+    localCache.clear('store_settings');
+    localCache.broadcastCatalogUpdate('discount_updated');
+    return res;
   }
 
   /**
@@ -269,7 +274,8 @@ export class SettingsService {
     }
 
     localCache.clear('store_settings');
-    localCache.set('store_settings', settings, 10 * 60 * 1000);
+    localCache.clear('products_all');
+    localCache.broadcastCatalogUpdate('settings_updated');
 
     if (typeof window !== 'undefined') {
       try {
@@ -277,6 +283,7 @@ export class SettingsService {
         localStorage.setItem('sfw_store_settings_cache_v2', JSON.stringify(settings));
         window.dispatchEvent(new CustomEvent('sfw_store_settings_updated', { detail: settings }));
         window.dispatchEvent(new CustomEvent('vpp_store_settings_updated', { detail: settings }));
+        window.dispatchEvent(new CustomEvent('vpp_catalog_updated'));
       } catch (err) {
         console.warn('Failed to dispatch settings update event:', err);
       }
@@ -300,6 +307,10 @@ export class SettingsService {
     }
 
     localCache.clear('store_settings');
+    if (key === 'discount_percentage') {
+      localCache.clear('products_all');
+      localCache.broadcastCatalogUpdate('discount_percentage_updated');
+    }
 
     if (typeof window !== 'undefined') {
       try {
@@ -308,6 +319,9 @@ export class SettingsService {
         localStorage.setItem('sfw_store_settings_cache_v2', JSON.stringify(fresh));
         window.dispatchEvent(new CustomEvent('sfw_store_settings_updated', { detail: fresh }));
         window.dispatchEvent(new CustomEvent('vpp_store_settings_updated', { detail: fresh }));
+        if (key === 'discount_percentage') {
+          window.dispatchEvent(new CustomEvent('vpp_catalog_updated'));
+        }
       } catch (err) {
         console.warn('Failed to broadcast single setting update:', err);
       }

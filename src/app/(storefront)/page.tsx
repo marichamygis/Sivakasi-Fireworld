@@ -20,6 +20,7 @@ import { Product, Category, DeliveryZone } from '@/types';
 import { useCart } from '@/context/CartContext';
 import { useStoreSettings } from '@/context/StoreSettingsContext';
 import { ProductService } from '@/lib/services/product.service';
+import { createClient } from '@/lib/supabase/client';
 
 export default function StorefrontPage() {
   const { settings } = useStoreSettings();
@@ -83,19 +84,27 @@ export default function StorefrontPage() {
       }
     }
 
-    loadDbData(false);
+    // Load 100% fresh data directly from Supabase DB on startup (bypassing any stale cache)
+    loadDbData(true);
 
     const handleCatalogUpdate = () => {
       loadDbData(true);
     };
 
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'vpp_catalog_last_updated') {
+      if (
+        e.key === 'vpp_catalog_last_updated' ||
+        e.key === 'sfw_store_settings_cache_v2' ||
+        e.key === 'sfw_cache_products_all' ||
+        e.key === 'sfw_cache_store_settings'
+      ) {
         loadDbData(true);
       }
     };
 
     window.addEventListener('vpp_catalog_updated', handleCatalogUpdate);
+    window.addEventListener('sfw_store_settings_updated', handleCatalogUpdate);
+    window.addEventListener('vpp_store_settings_updated', handleCatalogUpdate);
     window.addEventListener('storage', handleStorageChange);
 
     let broadcastChannel: BroadcastChannel | null = null;
@@ -106,11 +115,34 @@ export default function StorefrontPage() {
       };
     }
 
+    // Supabase Live Postgres Realtime subscription for instant discount & price sync
+    const supabase = createClient();
+    const liveChannel = supabase
+      .channel('storefront_live_catalog_sync')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'products' },
+        () => {
+          loadDbData(true);
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'store_settings' },
+        () => {
+          loadDbData(true);
+        }
+      )
+      .subscribe();
+
     return () => {
       isMounted = false;
       window.removeEventListener('vpp_catalog_updated', handleCatalogUpdate);
+      window.removeEventListener('sfw_store_settings_updated', handleCatalogUpdate);
+      window.removeEventListener('vpp_store_settings_updated', handleCatalogUpdate);
       window.removeEventListener('storage', handleStorageChange);
       if (broadcastChannel) broadcastChannel.close();
+      supabase.removeChannel(liveChannel);
     };
   }, []);
 

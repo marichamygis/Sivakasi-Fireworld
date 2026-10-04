@@ -72,7 +72,9 @@ export default function AdminDiscountPage() {
         `⚡ DIWALI PRE-BOOKING OPEN: Get up to ${discountPercent}% OFF Factory Direct Rates!`
       );
       setSavedPercent(discountPercent);
-      showToast('success', `Discount saved: ${discountPercent}% OFF`);
+      // Automatically apply new discount to all products in DB to ensure selling prices reflect instantly
+      const res = await ProductService.applyGlobalDiscount(discountPercent);
+      showToast('success', `Discount saved & applied to ${res.updatedCount} products at ${discountPercent}% OFF`);
     } catch (err: any) {
       showToast('error', err.message || 'Failed to save');
     } finally {

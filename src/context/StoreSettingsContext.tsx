@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { SettingsService, StoreSettings } from '@/lib/services/settings.service';
+import { createClient } from '@/lib/supabase/client';
 
 const SETTINGS_STORAGE_KEY = 'sfw_store_settings_cache_v2';
 
@@ -94,8 +95,8 @@ export const StoreSettingsProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   useEffect(() => {
-    // 1. Refresh in background using SWR (no network request if fresh in cache)
-    refreshSettings(false);
+    // 1. Fetch 100% fresh settings on mount directly from database (bypassing any stale cache)
+    refreshSettings(true);
 
     // 2. Listen for cross-component update events dispatched when settings are saved
     const handleSettingsUpdated = (e: Event) => {
@@ -108,12 +109,15 @@ export const StoreSettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === SETTINGS_STORAGE_KEY && e.newValue) {
+      if (
+        (e.key === SETTINGS_STORAGE_KEY || e.key === 'sfw_cache_store_settings') &&
+        e.newValue
+      ) {
         try {
           const parsed = JSON.parse(e.newValue);
           setSettings(sanitizeStoreSettings(parsed));
         } catch {
-          // ignore
+          refreshSettings(true);
         }
       }
     };
@@ -122,10 +126,24 @@ export const StoreSettingsProvider: React.FC<{ children: React.ReactNode }> = ({
     window.addEventListener('vpp_store_settings_updated', handleSettingsUpdated);
     window.addEventListener('storage', handleStorageChange);
 
+    // 3. Supabase Realtime listener on store_settings for instant cross-tab / cross-device updates
+    const supabase = createClient();
+    const settingsChannel = supabase
+      .channel('store_settings_realtime_sync')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'store_settings' },
+        () => {
+          refreshSettings(true);
+        }
+      )
+      .subscribe();
+
     return () => {
       window.removeEventListener('sfw_store_settings_updated', handleSettingsUpdated);
       window.removeEventListener('vpp_store_settings_updated', handleSettingsUpdated);
       window.removeEventListener('storage', handleStorageChange);
+      supabase.removeChannel(settingsChannel);
     };
   }, [refreshSettings]);
 
