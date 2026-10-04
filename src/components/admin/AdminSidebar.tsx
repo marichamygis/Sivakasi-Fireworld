@@ -40,11 +40,11 @@ export function AdminSidebar({ userEmail, onSignOutClick, onNavClick }: AdminSid
     { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
     { href: '/admin/billing', label: 'Billing / POS', icon: Receipt },
     { href: '/admin/products', label: 'Products', icon: Package },
-    { href: '/admin/banners', label: 'Hero Banner', icon: ImageLucide },
     { href: '/admin/categories', label: 'Categories', icon: SlidersHorizontal },
     { href: '/admin/discount', label: 'Discount', icon: Percent },
-    { href: '/admin/settings', label: 'Settings', icon: Settings },
+    { href: '/admin/banners', label: 'Hero Banner', icon: ImageLucide },
     { href: '/admin/notifications', label: 'Notifications', icon: Bell, badge: unreadCount },
+    { href: '/admin/settings', label: 'Settings', icon: Settings },
     { href: '/admin/profile', label: 'Profile', icon: User },
   ];
 
@@ -56,7 +56,7 @@ export function AdminSidebar({ userEmail, onSignOutClick, onNavClick }: AdminSid
 
   return (
     <aside className="w-full md:w-64 bg-white text-slate-900 shrink-0 border-r border-slate-200/90 h-full flex flex-col justify-between p-4 shadow-2xs">
-      <div>
+      <div className="flex-1 overflow-y-auto pr-0.5">
         {/* Brand Header */}
         <div className="pb-4 border-b border-slate-100 mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5 min-w-0">

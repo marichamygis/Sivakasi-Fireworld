@@ -35,16 +35,16 @@ export function AdminNavbar({
         return 'Billing & POS';
       case '/admin/products':
         return 'Products';
-      case '/admin/banners':
-        return 'Hero Banner';
       case '/admin/categories':
         return 'Categories';
       case '/admin/discount':
         return 'Global Discount';
-      case '/admin/settings':
-        return 'Store Settings';
+      case '/admin/banners':
+        return 'Hero Banner';
       case '/admin/notifications':
         return 'Notifications';
+      case '/admin/settings':
+        return 'Store Settings';
       case '/admin/profile':
         return 'Profile';
       default:
