@@ -9,8 +9,10 @@ import { useStoreSettings } from '@/context/StoreSettingsContext';
 export const Footer: React.FC = () => {
   const { settings } = useStoreSettings();
 
-  const helpline = settings?.helpline_mobile || '+91 99521 08746';
+  const helpline = settings?.helpline_mobile?.trim() || '';
   const cleanPhone = helpline.replace(/[^\d+]/g, '');
+  const storeAddress = settings?.store_address?.trim() || '';
+  const storeName = settings?.store_name || 'Sivakasi Fireworld';
 
   return (
     <footer className="bg-slate-100 text-slate-600 text-xs border-t border-slate-200">
@@ -31,10 +33,17 @@ export const Footer: React.FC = () => {
           <span className="font-bold text-slate-800">WhatsApp Copy Share</span>
         </div>
 
-        <a href={`tel:${cleanPhone}`} className="flex items-center gap-2 hover:text-amber-600 transition-colors">
-          <Phone className="w-4 h-4 text-amber-600 shrink-0" />
-          <span className="font-bold text-slate-800">{helpline}</span>
-        </a>
+        {helpline ? (
+          <a href={`tel:${cleanPhone}`} className="flex items-center gap-2 hover:text-amber-600 transition-colors">
+            <Phone className="w-4 h-4 text-amber-600 shrink-0" />
+            <span className="font-bold text-slate-800">{helpline}</span>
+          </a>
+        ) : (
+          <div className="flex items-center gap-2">
+            <Phone className="w-4 h-4 text-amber-600 shrink-0" />
+            <span className="font-bold text-slate-800">Direct Sivakasi Outlet</span>
+          </div>
+        )}
       </div>
 
       {/* Main Footer Links */}
@@ -49,12 +58,14 @@ export const Footer: React.FC = () => {
               className="h-7 w-auto max-w-[44px] object-contain"
             />
             <span className="font-black text-sm text-slate-950">
-              {settings?.store_name || 'SIVAKASI FIREWORLD'}
+              {storeName.toUpperCase()}
             </span>
           </div>
-          <p className="text-slate-500 text-[11px] leading-relaxed">
-            {settings?.store_address || '142/A Bypass Road, Sivakasi Industrial Estate, Tamil Nadu - 626123'}
-          </p>
+          {storeAddress ? (
+            <p className="text-slate-500 text-[11px] leading-relaxed">
+              {storeAddress}
+            </p>
+          ) : null}
         </div>
 
         <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-slate-700">

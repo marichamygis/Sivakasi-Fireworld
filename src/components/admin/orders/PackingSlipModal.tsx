@@ -241,15 +241,21 @@ export function PackingSlipModal({ order, onClose }: PackingSlipModalProps) {
             <span className="font-black text-slate-950 text-sm print:text-[10.5pt] block">
               {settings?.store_name || 'Sivakasi Fireworld'}
             </span>
-            <span className="text-slate-700 text-xs print:text-[9pt] block leading-relaxed">
-              {settings?.store_address || '3/421 Anjaneyar Nagar, Sattur Main Road, Anuppankulam, Sivakasi.'}
-            </span>
-            <div className="flex items-center gap-3 pt-1 text-xs print:text-[8.5pt] text-slate-700 font-mono font-bold border-t border-slate-200/80 mt-1">
-              {settings?.gstin && settings.gstin.trim() ? (
-                <span>GSTIN: {settings.gstin.trim()}</span>
-              ) : null}
-              <span>Ph: {settings?.helpline_mobile || '+91 99521 08746'}</span>
-            </div>
+            {settings?.store_address ? (
+              <span className="text-slate-700 text-xs print:text-[9pt] block leading-relaxed">
+                {settings.store_address}
+              </span>
+            ) : null}
+            {(settings?.gstin?.trim() || settings?.helpline_mobile?.trim()) ? (
+              <div className="flex items-center gap-3 pt-1 text-xs print:text-[8.5pt] text-slate-700 font-mono font-bold border-t border-slate-200/80 mt-1">
+                {settings?.gstin && settings.gstin.trim() ? (
+                  <span>GSTIN: {settings.gstin.trim()}</span>
+                ) : null}
+                {settings?.helpline_mobile && settings.helpline_mobile.trim() ? (
+                  <span>Ph: {settings.helpline_mobile.trim()}</span>
+                ) : null}
+              </div>
+            ) : null}
           </div>
 
           {/* Delivery To Customer */}

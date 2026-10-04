@@ -173,10 +173,10 @@ ${trackingUrl}
    */
   public static generateOrderWhatsAppLink(
     order: Order,
-    storePhoneNumber: string = '919952108746',
+    storePhoneNumber: string = '',
     storeName: string = 'Sivakasi Fireworld'
   ): string {
-    const cleanPhone = (storePhoneNumber || '919952108746').replace(/\D/g, '');
+    const cleanPhone = (storePhoneNumber || '').replace(/\D/g, '');
     const activeStoreName = storeName || 'Sivakasi Fireworld';
     const itemsList = order.items && order.items.length > 0
       ? order.items.map((i) => `• ${i.product_name} - ${i.quantity} ${i.quantity === 1 ? 'Pc' : 'Pcs'} - ₹${i.total_price.toLocaleString('en-IN')}`).join('\n')
@@ -185,7 +185,7 @@ ${trackingUrl}
     const text = `🎆 *NEW CRACKER ORDER: ${order.order_number}* 🎆\n\n*Customer Details:*\n• Name: ${order.customer_name}\n• Phone: ${order.customer_mobile}\n• Shipping Address: ${order.shipping_address}, ${order.city}, ${order.state} - ${order.pincode}\n\n*Ordered Items:*\n${itemsList}\n\n*Financial Summary:*\n• Subtotal: ₹${order.subtotal.toLocaleString('en-IN')}\n• Delivery Fee: ₹${(order.delivery_fee ?? 0).toLocaleString('en-IN')}\n• *Grand Total: ₹${order.grand_total.toLocaleString('en-IN')}*\n\nThank you for choosing ${activeStoreName}! Please confirm dispatch timeline.`;
 
     const encoded = encodeURIComponent(text);
-    return `https://wa.me/${cleanPhone}?text=${encoded}`;
+    return cleanPhone ? `https://wa.me/${cleanPhone}?text=${encoded}` : `https://wa.me/?text=${encoded}`;
   }
 
   /**
@@ -194,15 +194,15 @@ ${trackingUrl}
   public static generateSupportWhatsAppLink(
     order?: Order | null,
     message?: string,
-    storePhoneNumber: string = '919952108746',
+    storePhoneNumber: string = '',
     storeName: string = 'Sivakasi Fireworld'
   ): string {
-    const cleanPhone = (storePhoneNumber || '919952108746').replace(/\D/g, '');
+    const cleanPhone = (storePhoneNumber || '').replace(/\D/g, '');
     const activeStoreName = storeName || 'Sivakasi Fireworld';
     const text = message || (order
       ? `Hi ${activeStoreName} team, I am inquiring regarding my order *#${order.order_number}* (Customer: ${order.customer_name}). Current status: ${order.status}. Could you please assist me?`
       : `Hi ${activeStoreName} team, I need help locating my fireworks order. Could you please assist me?`);
     const encoded = encodeURIComponent(text);
-    return `https://wa.me/${cleanPhone}?text=${encoded}`;
+    return cleanPhone ? `https://wa.me/${cleanPhone}?text=${encoded}` : `https://wa.me/?text=${encoded}`;
   }
 }

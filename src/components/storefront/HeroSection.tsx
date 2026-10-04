@@ -40,12 +40,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   selectedZone,
   storeName = 'Sivakasi Fireworld',
   tagline = 'Direct Factory Outlet • Sivakasi, Tamil Nadu',
-  whatsappNumber = '919952108746',
+  whatsappNumber = '',
   heroBannerImageUrl,
   heroBannerLinkUrl,
   heroBannerEnabled = true,
 }) => {
-  const cleanWhatsapp = whatsappNumber.replace(/\D/g, '');
+  const cleanWhatsapp = (whatsappNumber || '').replace(/\D/g, '');
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -94,11 +94,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </a>
 
                 <a
-                  href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
+                  href={cleanWhatsapp ? `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
                     `Hi ${storeName}, I would like to know more about the Diwali 2026 factory pricing and gift boxes.`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  )}` : '#catalog'}
+                  target={cleanWhatsapp ? "_blank" : undefined}
+                  rel={cleanWhatsapp ? "noopener noreferrer" : undefined}
                   className="px-3.5 sm:px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm rounded-xl border border-white/20 backdrop-blur-md transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
                 >
                   <WhatsAppIcon className="w-4 h-4 fill-emerald-400" />

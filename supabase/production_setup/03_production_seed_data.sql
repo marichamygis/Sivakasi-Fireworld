@@ -8,10 +8,20 @@
 INSERT INTO store_settings (key, value) VALUES
   ('store_name', 'Sivakasi Fireworld'),
   ('tagline', 'Sivakasi Direct Fireworks Outlet'),
-  ('helpline_mobile', '+91 98401 23456'),
-  ('whatsapp_number', '919840123456'),
-  ('gstin', '33AAACV1234A1Z5'),
-  ('announcement_banner', '⚡ DIWALI PRE-BOOKING OPEN: Get up to 80% OFF Factory Direct Rates!')
+  ('helpline_mobile', ''),
+  ('whatsapp_number', ''),
+  ('gstin', ''),
+  ('announcement_banner', '⚡ DIWALI PRE-BOOKING OPEN: Get up to 80% OFF Factory Direct Rates!'),
+  ('discount_percentage', '80'),
+  ('store_address', ''),
+  ('max_order_limit_enabled', 'false'),
+  ('max_order_limit_amount', '50000'),
+  ('min_order_tamil_nadu', '3000'),
+  ('min_order_other_states', '5000'),
+  ('state_min_order_overrides', '{}'),
+  ('hero_banner_enabled', 'false'),
+  ('hero_banner_image_url', ''),
+  ('hero_banner_link_url', '#catalog')
 ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
 
 -- 2. SEED REGIONAL DELIVERY ZONES

@@ -2,7 +2,7 @@
 -- Adds address, maximum order limit, and regional minimum order settings to store_settings
 
 INSERT INTO store_settings (key, value) VALUES
-  ('store_address', '142/A Bypass Road, Sivakasi Industrial Estate, Tamil Nadu - 626123'),
+  ('store_address', ''),
   ('max_order_limit_enabled', 'false'),
   ('max_order_limit_amount', '50000'),
   ('min_order_tamil_nadu', '3000'),

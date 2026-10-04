@@ -47,25 +47,13 @@ export const JsonLd: React.FC = () => {
     image: `${siteUrl}/og-image.png`,
     description:
       'Licensed Sivakasi fireworks manufacturer and direct factory outlet offering Diwali crackers online with wholesale transparent pricing.',
-    telephone: '+91-99521-08746',
-    email: 'support@sivakasifireworld.com',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '142/A Bypass Road, Sivakasi Industrial Estate',
       addressLocality: 'Sivakasi',
       addressRegion: 'Tamil Nadu',
       postalCode: '626123',
       addressCountry: 'IN',
     },
-    contactPoint: [
-      {
-        '@type': 'ContactPoint',
-        telephone: '+91-99521-08746',
-        contactType: 'customer service',
-        areaServed: 'IN',
-        availableLanguage: ['en'],
-      },
-    ],
   };
 
   // 3. Store / LocalBusiness Schema (For local map and store search snippets)
@@ -83,13 +71,11 @@ export const JsonLd: React.FC = () => {
     },
     description:
       'Direct Sivakasi factory prices on Diwali crackers, sparklers, ground chakkars, flower pots, rockets, fancy aerial shots & gift boxes. Fast doorstep delivery across Tamil Nadu & India.',
-    telephone: '+91-99521-08746',
     priceRange: '₹₹',
     currenciesAccepted: 'INR',
     paymentAccepted: 'Cash on Delivery, UPI, Net Banking, Bank Transfer',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '142/A Bypass Road, Sivakasi Industrial Estate',
       addressLocality: 'Sivakasi',
       addressRegion: 'Tamil Nadu',
       postalCode: '626123',

@@ -74,12 +74,12 @@ export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<StoreSettings>({
     store_name: 'Sivakasi Fireworld',
     tagline: 'Sivakasi Direct Fireworks Outlet',
-    helpline_mobile: '+91 99521 08746',
-    whatsapp_number: '919952108746',
+    helpline_mobile: '',
+    whatsapp_number: '',
     gstin: '',
     announcement_banner: '⚡ DIWALI PRE-BOOKING OPEN: Get up to 80% OFF Factory Direct Rates!',
     discount_percentage: 80,
-    store_address: '3/421 Anjaneyar Nagar, Sattur Main Road, Anuppankulam, Sivakasi.',
+    store_address: '',
     max_order_limit_enabled: false,
     max_order_limit_amount: 50000,
     min_order_tamil_nadu: 3000,
@@ -302,10 +302,9 @@ export default function AdminSettingsPage() {
               </div>
               <textarea
                 rows={2}
-                required
                 value={settings.store_address}
                 onChange={(e) => setSettings({ ...settings, store_address: e.target.value })}
-                placeholder="142/A Bypass Road, Sivakasi Industrial Estate, Tamil Nadu - 626123"
+                placeholder="Enter store / bill address (optional)"
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-900 font-medium text-xs focus:outline-none focus:bg-white focus:border-amber-500 transition-all leading-relaxed"
               />
             </div>
@@ -321,7 +320,7 @@ export default function AdminSettingsPage() {
                   value={settings.helpline_mobile}
                   onChange={(e) => setSettings({ ...settings, helpline_mobile: e.target.value })}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-900 font-mono text-xs focus:outline-none focus:bg-white focus:border-amber-500"
-                  placeholder="+91 99521 08746"
+                  placeholder="e.g. +91 98401 23456 (optional)"
                 />
               </div>
 
@@ -334,7 +333,7 @@ export default function AdminSettingsPage() {
                   value={settings.whatsapp_number}
                   onChange={(e) => setSettings({ ...settings, whatsapp_number: e.target.value.replace(/\D/g, '') })}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-900 font-mono text-xs focus:outline-none focus:bg-white focus:border-amber-500"
-                  placeholder="919952108746"
+                  placeholder="e.g. 919840123456 (optional)"
                 />
               </div>
             </div>
