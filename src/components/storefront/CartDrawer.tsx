@@ -148,8 +148,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                 <div key={product.id} className="py-3 flex items-center justify-between gap-3">
                   <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
                     <img
-                      src={product.image_url || '/logo.png'}
+                      src={product.image_url || '/placeholder-product.svg'}
                       alt={product.name}
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.src.endsWith('/placeholder-product.svg')) {
+                          target.src = '/placeholder-product.svg';
+                        }
+                      }}
                       className={`w-full h-full ${product.image_url ? 'object-cover' : 'object-contain p-1'}`}
                     />
                   </div>

@@ -258,9 +258,15 @@ export function BillingProductList({
                             <td className="w-[32px] sm:w-[48px] py-1 sm:py-2 px-0.5 sm:px-1 text-center border-r border-slate-200/80 align-middle">
                               <div className="relative w-7 h-7 sm:w-10 sm:h-10 bg-slate-50 rounded-lg overflow-hidden border border-slate-200/80 shrink-0 mx-auto shadow-2xs">
                                 <img
-                                  src={product.image_url || '/logo.png'}
+                                  src={product.image_url || '/placeholder-product.svg'}
                                   alt={product.name}
-                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    const target = e.currentTarget;
+                                    if (!target.src.endsWith('/placeholder-product.svg')) {
+                                      target.src = '/placeholder-product.svg';
+                                    }
+                                  }}
+                                  className={`w-full h-full ${product.image_url ? 'object-cover' : 'object-contain p-0.5'}`}
                                   loading="lazy"
                                 />
                               </div>

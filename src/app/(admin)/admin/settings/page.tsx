@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Save,
   Building2,
@@ -20,6 +21,11 @@ import {
   X,
   Image as ImageIcon,
   ChevronRight,
+  Upload,
+  RotateCcw,
+  Sparkles,
+  Globe,
+  Link as LinkIcon,
 } from 'lucide-react';
 import { SettingsService, StoreSettings } from '@/lib/services/settings.service';
 import { useStoreSettings } from '@/context/StoreSettingsContext';
@@ -69,7 +75,10 @@ export default function AdminSettingsPage() {
   const { updateSettingsState } = useStoreSettings();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [isLogoUrlOpen, setIsLogoUrlOpen] = useState(false);
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const logoFileInputRef = useRef<HTMLInputElement>(null);
 
   const [settings, setSettings] = useState<StoreSettings>({
     store_name: 'Sivakasi Fireworld',
@@ -88,6 +97,7 @@ export default function AdminSettingsPage() {
     hero_banner_enabled: false,
     hero_banner_image_url: '',
     hero_banner_link_url: '#catalog',
+    logo_url: '',
   });
 
   const [zones, setZones] = useState<DeliveryZone[]>([]);
@@ -96,7 +106,38 @@ export default function AdminSettingsPage() {
 
   const showToast = (type: 'success' | 'error', message: string) => {
     setToast({ type, message });
-    setTimeout(() => setToast(null), 3000);
+    setTimeout(() => setToast(null), 3500);
+  };
+
+  const handleLogoFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showToast('error', 'Please upload a valid image file (PNG, WebP, JPG, or SVG).');
+      return;
+    }
+
+    try {
+      setUploadingLogo(true);
+      const uploadedUrl = await SettingsService.uploadLogoImage(file);
+      const updated = { ...settings, logo_url: uploadedUrl };
+      setSettings(updated);
+      showToast('success', 'Logo uploaded! Click "Save" to apply changes across the site.');
+    } catch (err: any) {
+      console.error('Logo upload error:', err);
+      showToast('error', err?.message || 'Failed to upload logo.');
+    } finally {
+      setUploadingLogo(false);
+      if (logoFileInputRef.current) {
+        logoFileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleRemoveLogo = () => {
+    setSettings((prev) => ({ ...prev, logo_url: '' }));
+    showToast('success', 'Custom logo removed. Click "Save" to apply changes.');
   };
 
   const loadData = async () => {
@@ -108,6 +149,9 @@ export default function AdminSettingsPage() {
       ]);
       if (!fetchedSettings.store_name || /vail[iy]/i.test(fetchedSettings.store_name)) {
         fetchedSettings.store_name = 'Sivakasi Fireworld';
+      }
+      if (!fetchedSettings.logo_url || fetchedSettings.logo_url === '/logo.png') {
+        fetchedSettings.logo_url = '';
       }
       setSettings(fetchedSettings);
       setZones(fetchedZones);
@@ -276,6 +320,185 @@ export default function AdminSettingsPage() {
       </Link>
 
       <form onSubmit={handleSave} className="space-y-3 sm:space-y-4">
+        {/* CARD 0: SITE BRAND LOGO & FAVICON */}
+        <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/90 shadow-2xs space-y-4">
+          <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xs shrink-0">
+                <ImageIcon className="w-3.5 h-3.5" />
+              </div>
+              <div>
+                <h2 className="font-extrabold text-sm text-slate-900 flex items-center gap-1.5">
+                  <span>Site Brand Logo &amp; Favicon</span>
+                  <span className="text-[10px] font-black text-amber-700 bg-amber-100/70 border border-amber-300/70 px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                    Site-Wide
+                  </span>
+                </h2>
+              </div>
+            </div>
+            <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">
+              Reflected on Storefront, Admin &amp; Favicons
+            </span>
+          </div>
+
+          <p className="text-xs text-slate-500 font-medium leading-relaxed">
+            Upload or change your site brand logo anytime. Your updated logo is instantly synced across the entire site — including the storefront header &amp; footer, mobile slide-out menus, admin navigation sidebar &amp; login, and the browser tab favicon icon.
+          </p>
+
+          {/* LIVE PREVIEW SECTION (Light Mode + Dark Mode + Browser Tab Preview) */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            {/* 1. Light Mode Preview (Storefront & Admin) */}
+            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center text-center space-y-2">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                Light Mode / Header
+              </span>
+              <div className="w-full h-20 bg-white rounded-lg border border-slate-200/80 p-2 flex items-center justify-center shadow-2xs">
+                {settings.logo_url && settings.logo_url !== '/logo.png' ? (
+                  <Image
+                    src={settings.logo_url}
+                    alt="Site Logo Preview"
+                    width={140}
+                    height={56}
+                    unoptimized
+                    className="max-h-16 w-auto object-contain transition-all duration-200"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-slate-400 gap-1">
+                    <ImageIcon className="w-6 h-6 stroke-1 text-slate-300" />
+                    <span className="text-[11px] font-bold text-slate-400">No Custom Logo</span>
+                  </div>
+                )}
+              </div>
+              <span className="text-[10px] text-slate-400 font-medium">Header, Footer &amp; Sidebar</span>
+            </div>
+
+            {/* 2. Dark Mode Preview (Festive Banner & Mobile Dark Glow) */}
+            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex flex-col items-center justify-center text-center space-y-2">
+              <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">
+                Dark Mode / Hero
+              </span>
+              <div className="w-full h-20 bg-slate-900 rounded-lg border border-slate-800 p-2 flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/10 to-red-500/10 pointer-events-none" />
+                {settings.logo_url && settings.logo_url !== '/logo.png' ? (
+                  <Image
+                    src={settings.logo_url}
+                    alt="Site Logo Dark Preview"
+                    width={140}
+                    height={56}
+                    unoptimized
+                    className="max-h-16 w-auto object-contain relative z-10 drop-shadow-md"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-slate-500 gap-1 relative z-10">
+                    <ImageIcon className="w-6 h-6 stroke-1 text-slate-600" />
+                    <span className="text-[11px] font-bold text-slate-500">No Custom Logo</span>
+                  </div>
+                )}
+              </div>
+              <span className="text-[10px] text-slate-400 font-medium">Hero Banners &amp; Loaders</span>
+            </div>
+
+            {/* 3. Browser Tab Favicon Simulation Preview */}
+            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex flex-col items-center justify-center text-center space-y-2">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                Tab Favicon Preview
+              </span>
+              <div className="w-full h-20 bg-slate-200/70 rounded-lg border border-slate-300 p-2 flex items-end justify-center pb-2">
+                {/* Browser Tab Simulation Pill */}
+                <div className="bg-white rounded-t-lg px-2.5 py-1.5 border-t border-x border-slate-300 shadow-xs flex items-center gap-1.5 max-w-[170px] truncate">
+                  <div className="w-4 h-4 rounded-sm shrink-0 overflow-hidden flex items-center justify-center bg-slate-100">
+                    {settings.logo_url && settings.logo_url !== '/logo.png' ? (
+                      <Image
+                        src={settings.logo_url}
+                        alt="Favicon"
+                        width={16}
+                        height={16}
+                        unoptimized
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <Sparkles className="w-3 h-3 text-amber-500 fill-amber-400" />
+                    )}
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-800 truncate">
+                    {settings.store_name || 'Sivakasi Fireworld'}
+                  </span>
+                </div>
+              </div>
+              <span className="text-[10px] text-slate-400 font-medium">Browser Tab Icon</span>
+            </div>
+          </div>
+
+          {/* ACTION BUTTONS: UPLOAD, URL, REMOVE */}
+          <div className="pt-1 flex flex-wrap items-center gap-2">
+            <input
+              type="file"
+              ref={logoFileInputRef}
+              onChange={handleLogoFileUpload}
+              accept="image/png,image/webp,image/jpeg,image/svg+xml,image/gif"
+              className="hidden"
+            />
+
+            <button
+              type="button"
+              disabled={uploadingLogo || saving}
+              onClick={() => logoFileInputRef.current?.click()}
+              className="px-4 py-2 bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold text-xs rounded-xl shadow-xs transition-all inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            >
+              {uploadingLogo ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <Upload className="w-3.5 h-3.5" />
+              )}
+              <span>{uploadingLogo ? 'Uploading & Optimizing...' : 'Upload Logo Image'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsLogoUrlOpen(!isLogoUrlOpen)}
+              className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-colors cursor-pointer inline-flex items-center gap-1.5"
+            >
+              <LinkIcon className="w-3.5 h-3.5 text-slate-500" />
+              <span>{isLogoUrlOpen ? 'Hide URL Input' : 'Paste Image URL'}</span>
+            </button>
+
+            {settings.logo_url && settings.logo_url !== '/logo.png' && (
+              <button
+                type="button"
+                onClick={handleRemoveLogo}
+                className="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs rounded-xl border border-rose-200 transition-colors cursor-pointer inline-flex items-center gap-1.5"
+                title="Remove custom logo"
+              >
+                <X className="w-3.5 h-3.5" />
+                <span>Remove Logo</span>
+              </button>
+            )}
+          </div>
+
+          {/* Collapsible Direct URL Input */}
+          {isLogoUrlOpen && (
+            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5 animate-in fade-in duration-150 text-xs">
+              <label className="block text-slate-700 font-bold text-[11px]">
+                Direct Logo Image URL
+              </label>
+              <input
+                type="text"
+                value={settings.logo_url}
+                onChange={(e) => setSettings({ ...settings, logo_url: e.target.value })}
+                placeholder="https://your-domain.com/brand-logo.png"
+                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-slate-900 font-mono text-xs focus:outline-none focus:border-amber-500"
+              />
+              <span className="text-[10px] text-slate-400 block font-medium">
+                Enter an absolute URL (e.g. Supabase Storage link or CDN) or local path.
+              </span>
+            </div>
+          )}
+
+          <div className="text-[11px] text-slate-400 font-medium">
+            💡 <strong>Pro Tip:</strong> Use a transparent PNG or SVG logo for crisp display on both light backgrounds and dark festive sections.
+          </div>
+        </div>
+
         {/* CARD 1: ADDRESS IN BILL & STORE INFO */}
         <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/90 shadow-2xs space-y-3">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-100">

@@ -1,4 +1,5 @@
 import { Order } from '@/types';
+import { SettingsService } from './settings.service';
 
 export class NotificationService {
   /**
@@ -39,15 +40,20 @@ export class NotificationService {
     if (Notification.permission !== 'granted') return;
 
     try {
-      const title = `🎆 NEW ORDER: ${order.order_number || 'VPP-2026'}`;
+      const title = `🎆 NEW ORDER: ${order.order_number || 'SFW-2026'}`;
       const itemCount = order.items?.length || 1;
       const formattedTotal = (order.grand_total || 0).toLocaleString('en-IN');
       const body = `Customer: ${order.customer_name || 'Valued Customer'}\nTotal: ₹${formattedTotal} (${itemCount} items)\nLocation: ${order.city || 'Tamil Nadu'}`;
 
+      const cachedSettings = SettingsService.getCachedSettings();
+      const logoUrl = (cachedSettings?.logo_url && cachedSettings.logo_url !== '/logo.png')
+        ? cachedSettings.logo_url
+        : '/favicon-192x192.png';
+
       const notification = new Notification(title, {
         body,
-        icon: '/logo.png',
-        badge: '/logo.png',
+        icon: logoUrl,
+        badge: logoUrl,
         tag: `order-${order.id || order.order_number}`,
       });
 

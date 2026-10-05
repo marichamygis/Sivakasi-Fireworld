@@ -16,6 +16,9 @@ function sanitizeStoreSettings(s: StoreSettings): StoreSettings {
     clean.hero_banner_image_url = '';
     clean.hero_banner_enabled = false;
   }
+  if (!clean.logo_url || clean.logo_url === '/logo.png') {
+    clean.logo_url = '';
+  }
   return clean;
 }
 
@@ -36,6 +39,7 @@ const DEFAULT_STORE_SETTINGS: StoreSettings = {
   hero_banner_enabled: false,
   hero_banner_image_url: '',
   hero_banner_link_url: '#catalog',
+  logo_url: '',
 };
 
 interface StoreSettingsContextType {

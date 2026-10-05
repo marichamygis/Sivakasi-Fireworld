@@ -14,15 +14,9 @@ export default function StorefrontLoading() {
         <div className="relative mb-6">
           <div className="absolute -inset-4 bg-gradient-to-r from-amber-400/30 via-red-500/30 to-amber-500/30 rounded-3xl blur-2xl animate-pulse pointer-events-none" />
           
-          <div className="relative bg-white rounded-3xl p-6 sm:p-8 border-2 border-amber-300 shadow-2xl shadow-amber-500/15 flex items-center justify-center">
-            <Image
-              src="/logo.png"
-              alt="Sivakasi Fireworld Logo"
-              width={300}
-              height={200}
-              priority
-              className="h-20 sm:h-28 w-auto max-w-[240px] sm:max-w-[320px] object-contain drop-shadow-md"
-            />
+          <div className="relative bg-white rounded-3xl p-6 sm:p-8 border-2 border-amber-300 shadow-2xl shadow-amber-500/15 flex flex-col items-center justify-center min-w-[200px]">
+            <span className="text-4xl mb-1">🎆</span>
+            <span className="font-heading font-black text-slate-900 text-sm tracking-tight">SIVAKASI FIREWORLD</span>
 
             {/* Sparkle badge */}
             <div className="absolute -top-2.5 -right-2.5 w-8 h-8 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shadow-lg animate-bounce">

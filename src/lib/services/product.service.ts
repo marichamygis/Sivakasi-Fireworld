@@ -93,11 +93,11 @@ export class ProductService {
         if (typeof reader.result === 'string') {
           resolve(reader.result);
         } else {
-          resolve('/logo.png');
+          resolve('');
         }
       };
       reader.onerror = () => {
-        resolve('/logo.png');
+        resolve('');
       };
       reader.readAsDataURL(compressedFile);
     });
@@ -108,7 +108,7 @@ export class ProductService {
    * to avoid unwanted storage consumption when an image is replaced or removed.
    */
   static async deleteProductImage(imageUrl: string): Promise<boolean> {
-    if (!imageUrl || imageUrl.startsWith('data:') || imageUrl === '/logo.png' || imageUrl.includes('logo.png')) {
+    if (!imageUrl || imageUrl.startsWith('data:') || !imageUrl.includes('product-images/')) {
       return false;
     }
 

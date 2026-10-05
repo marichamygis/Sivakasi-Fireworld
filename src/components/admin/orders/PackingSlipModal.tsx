@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
+import Image from 'next/image';
 import { X, Printer, Sparkles, Tag } from 'lucide-react';
 import { Order, Product } from '@/types';
 import { useStoreSettings } from '@/context/StoreSettingsContext';
@@ -211,13 +212,31 @@ export function PackingSlipModal({ order, onClose }: PackingSlipModalProps) {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4">
-            <div>
-              <span className="text-[10px] sm:text-xs print:text-[9pt] font-black text-amber-700 uppercase tracking-widest block">
-                {(settings?.store_name || 'SIVAKASI FIREWORLD').toUpperCase()} • SIVAKASI DIRECT WAREHOUSE
-              </span>
-              <h1 className="text-lg sm:text-2xl print:text-[14pt] font-black text-slate-950 tracking-tight mt-0.5">
-                {settings?.gstin?.trim() ? 'TAX INVOICE & PACKING BILL' : 'RETAIL INVOICE & PACKING BILL'}
-              </h1>
+            <div className="flex items-center gap-3">
+              {settings?.logo_url && settings.logo_url !== '/logo.png' ? (
+                <div className="w-11 h-11 rounded-xl bg-white border border-slate-200/90 p-1 flex items-center justify-center shrink-0">
+                  <Image
+                    src={settings.logo_url}
+                    alt="Store Logo"
+                    width={44}
+                    height={44}
+                    unoptimized
+                    className="max-h-9 w-auto object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="w-11 h-11 rounded-xl bg-amber-500 text-slate-950 font-black flex items-center justify-center text-sm shrink-0">
+                  SF
+                </div>
+              )}
+              <div>
+                <span className="text-[10px] sm:text-xs print:text-[9pt] font-black text-amber-700 uppercase tracking-widest block">
+                  {(settings?.store_name || 'SIVAKASI FIREWORLD').toUpperCase()} • SIVAKASI DIRECT WAREHOUSE
+                </span>
+                <h1 className="text-lg sm:text-2xl print:text-[14pt] font-black text-slate-950 tracking-tight mt-0.5">
+                  {settings?.gstin?.trim() ? 'TAX INVOICE & PACKING BILL' : 'RETAIL INVOICE & PACKING BILL'}
+                </h1>
+              </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-2 text-xs print:text-[9.5pt] text-slate-700 font-mono font-bold pt-0.5 sm:pt-0 sm:text-right">

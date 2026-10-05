@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Shield, Lock, Mail, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { AuthService } from '@/lib/services/auth.service';
+import { useStoreSettings } from '@/context/StoreSettingsContext';
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const { settings } = useStoreSettings();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -59,19 +61,26 @@ export default function AdminLoginPage() {
           
           {/* Brand & Header */}
           <div className="text-center space-y-3">
-            <div className="w-20 h-16 rounded-2xl bg-white border border-slate-200/90 p-2 flex items-center justify-center mx-auto shadow-md shadow-slate-200/50">
-              <Image
-                src="/logo.png"
-                alt="Sivakasi Fireworld Logo"
-                width={72}
-                height={48}
-                className="w-full h-full object-contain"
-                priority
-              />
-            </div>
+            {settings?.logo_url && settings.logo_url !== '/logo.png' ? (
+              <div className="w-20 h-16 rounded-2xl bg-white border border-slate-200/90 p-2 flex items-center justify-center mx-auto shadow-md shadow-slate-200/50">
+                <Image
+                  src={settings.logo_url}
+                  alt={`${settings?.store_name || 'Sivakasi Fireworld'} Logo`}
+                  width={72}
+                  height={48}
+                  unoptimized
+                  className="w-full h-full object-contain"
+                  priority
+                />
+              </div>
+            ) : (
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-600 text-slate-950 font-black flex items-center justify-center mx-auto text-2xl shadow-lg shadow-amber-500/20">
+                ✨
+              </div>
+            )}
             <div className="space-y-1">
               <span className="text-[11px] font-bold text-amber-600 tracking-wider uppercase block">
-                Sivakasi Fireworld
+                {settings?.store_name || 'Sivakasi Fireworld'}
               </span>
               <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
                 Admin Sign In

@@ -19,6 +19,7 @@ export interface StoreSettings {
   hero_banner_enabled: boolean;
   hero_banner_image_url: string;
   hero_banner_link_url: string;
+  logo_url: string;
 }
 
 const DEFAULT_SETTINGS: StoreSettings = {
@@ -38,6 +39,7 @@ const DEFAULT_SETTINGS: StoreSettings = {
   hero_banner_enabled: false,
   hero_banner_image_url: '',
   hero_banner_link_url: '#catalog',
+  logo_url: '',
 };
 
 export class SettingsService {
@@ -152,6 +154,7 @@ export class SettingsService {
         hero_banner_enabled: heroBannerEnabled,
         hero_banner_image_url: bannerUrl,
         hero_banner_link_url: settingsMap['hero_banner_link_url'] || DEFAULT_SETTINGS.hero_banner_link_url,
+        logo_url: (settingsMap['logo_url'] && settingsMap['logo_url'] !== '/logo.png') ? settingsMap['logo_url'] : '',
       };
 
       localCache.set('store_settings', settings, 2 * 60 * 1000); // 2 min TTL for live settings sync
@@ -220,6 +223,66 @@ export class SettingsService {
   }
 
   /**
+   * Upload site logo image to Supabase Storage with client-side compression/preservation & 1-year cache.
+   */
+  static async uploadLogoImage(file: File): Promise<string> {
+    const isSvg = file.type === 'image/svg+xml';
+    const isPng = file.type === 'image/png';
+
+    const compressedFile = isSvg
+      ? file
+      : await compressImageFile(file, {
+          maxWidth: 800,
+          maxHeight: 800,
+          quality: 0.92,
+          mimeType: isPng ? 'image/png' : 'image/webp',
+        });
+
+    const supabase = this.getSupabase();
+    const fileExt = compressedFile.name.split('.').pop() || (isPng ? 'png' : 'webp');
+    const fileName = `site-logo-${Date.now()}.${fileExt}`;
+    const filePath = `brand/${fileName}`;
+
+    try {
+      const { data, error } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, compressedFile, {
+          cacheControl: '31536000',
+          upsert: true,
+        });
+
+      if (!error && data) {
+        const { data: publicUrlData } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(filePath);
+
+        if (publicUrlData?.publicUrl) {
+          return publicUrlData.publicUrl;
+        }
+      }
+    } catch (err: any) {
+      console.warn('Supabase logo upload failed, using Data URL fallback:', err?.message || err);
+    }
+
+    // Fallback to Data URL
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(typeof reader.result === 'string' ? reader.result : '');
+      };
+      reader.onerror = () => resolve('');
+      reader.readAsDataURL(compressedFile);
+    });
+  }
+
+  /**
+   * Update site logo URL directly and broadcast update across the entire app.
+   */
+  static async updateLogoUrl(logoUrl: string): Promise<boolean> {
+    return this.saveSetting('logo_url', logoUrl || DEFAULT_SETTINGS.logo_url);
+  }
+
+  /**
    * Get active global discount percentage directly.
    */
   static async getDiscountPercentage(): Promise<number> {
@@ -262,6 +325,7 @@ export class SettingsService {
       { key: 'hero_banner_enabled', value: String(settings.hero_banner_enabled) },
       { key: 'hero_banner_image_url', value: settings.hero_banner_image_url || '' },
       { key: 'hero_banner_link_url', value: settings.hero_banner_link_url || '#catalog' },
+      { key: 'logo_url', value: (settings.logo_url && settings.logo_url !== '/logo.png') ? settings.logo_url : '' },
     ].map((r) => ({ ...r, updated_at: new Date().toISOString() }));
 
     const { error } = await supabase

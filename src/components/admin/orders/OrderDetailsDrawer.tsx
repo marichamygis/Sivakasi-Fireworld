@@ -277,8 +277,14 @@ export function OrderDetailsDrawer({
                       <div className="flex items-center gap-3 truncate pr-2 min-w-0">
                         <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden text-base font-bold">
                           <img
-                            src={item.image_url || '/logo.png'}
+                            src={item.image_url || '/placeholder-product.svg'}
                             alt={item.product_name}
+                            onError={(e) => {
+                              const target = e.currentTarget;
+                              if (!target.src.endsWith('/placeholder-product.svg')) {
+                                target.src = '/placeholder-product.svg';
+                              }
+                            }}
                             className={`w-full h-full ${item.image_url ? 'object-cover' : 'object-contain p-1'}`}
                           />
                         </div>

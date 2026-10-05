@@ -366,9 +366,15 @@ export default function AdminProductsPage() {
                         <div className="flex items-center gap-2.5">
                           <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden font-bold">
                             <img
-                              src={product.image_url || '/logo.png'}
+                              src={product.image_url || '/placeholder-product.svg'}
                               alt={product.name}
-                              className={`w-full h-full ${product.image_url ? 'object-cover' : 'object-contain p-1'}`}
+                              onError={(e) => {
+                                const target = e.currentTarget;
+                                if (!target.src.endsWith('/placeholder-product.svg')) {
+                                  target.src = '/placeholder-product.svg';
+                                }
+                              }}
+                              className={`w-full h-full ${product.image_url ? 'object-cover' : 'object-contain p-0.5'}`}
                             />
                           </div>
                           <div className="min-w-0 flex flex-col items-start gap-0.5">

@@ -58,14 +58,21 @@ export default function OrderConfirmationPage() {
         <div className="text-center space-y-4 max-w-sm">
           <div className="relative inline-block">
             <div className="p-4 bg-white rounded-2xl border border-amber-300 shadow-md">
-              <Image
-                src="/logo.png"
-                alt="Sivakasi Fireworld"
-                width={160}
-                height={100}
-                priority
-                className="h-14 w-auto object-contain animate-pulse"
-              />
+              {settings?.logo_url && settings.logo_url !== '/logo.png' ? (
+                <Image
+                  src={settings.logo_url}
+                  alt={settings?.store_name || 'Sivakasi Fireworld'}
+                  width={160}
+                  height={100}
+                  priority
+                  unoptimized
+                  className="h-14 w-auto object-contain animate-pulse"
+                />
+              ) : (
+                <div className="w-16 h-14 flex items-center justify-center text-3xl mx-auto">
+                  🎆
+                </div>
+              )}
             </div>
           </div>
           <div className="space-y-1">

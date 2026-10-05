@@ -73,18 +73,18 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose
           {/* Image */}
           <div className="relative w-full aspect-[16/10] bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-center overflow-hidden">
             <img
-              src={product.image_url || '/logo.png'}
+              src={product.image_url || '/placeholder-product.svg'}
               alt={product.name}
               loading="lazy"
               decoding="async"
               onError={(e) => {
                 const target = e.currentTarget;
-                if (!target.src.endsWith('/logo.png')) {
-                  target.src = '/logo.png';
+                if (!target.src.endsWith('/placeholder-product.svg')) {
+                  target.src = '/placeholder-product.svg';
                 }
               }}
               className={`w-full h-full ${
-                product.image_url ? 'object-cover' : 'object-contain p-6'
+                product.image_url ? 'object-cover' : 'object-contain p-4'
               }`}
             />
 

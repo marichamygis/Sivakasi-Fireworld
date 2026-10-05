@@ -1,8 +1,7 @@
 // Sivakasi Fireworld Admin PWA Service Worker
-const CACHE_NAME = 'sfw-admin-v1';
+const CACHE_NAME = 'sfw-admin-v2';
 const ASSETS_TO_CACHE = [
   '/admin',
-  '/logo.png',
   '/manifest.json'
 ];
 
@@ -49,8 +48,8 @@ self.addEventListener('push', (event) => {
   const title = data.title || '🎆 New Order Received!';
   const options = {
     body: data.body || 'A new fireworks order has been placed.',
-    icon: '/logo.png',
-    badge: '/logo.png',
+    icon: '/favicon-192x192.png',
+    badge: '/favicon-192x192.png',
     data: data.url || '/admin/orders',
   };
 

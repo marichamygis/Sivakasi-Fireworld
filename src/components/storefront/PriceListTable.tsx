@@ -240,7 +240,7 @@ export const PriceListTable: React.FC<PriceListTableProps> = ({
                             title="Click to view photo"
                           >
                             <img
-                              src={product.image_url || '/logo.png'}
+                              src={product.image_url || '/placeholder-product.svg'}
                               alt={product.name}
                               width={40}
                               height={40}
@@ -248,12 +248,12 @@ export const PriceListTable: React.FC<PriceListTableProps> = ({
                               decoding="async"
                               onError={(e) => {
                                 const target = e.currentTarget;
-                                if (!target.src.endsWith('/logo.png')) {
-                                  target.src = '/logo.png';
+                                if (!target.src.endsWith('/placeholder-product.svg')) {
+                                  target.src = '/placeholder-product.svg';
                                 }
                               }}
                               className={`w-full h-full ${
-                                product.image_url ? 'object-cover' : 'object-contain p-1'
+                                product.image_url ? 'object-cover' : 'object-contain p-0.5'
                               } group-hover:scale-110 transition-transform duration-200`}
                             />
                             <div className="absolute inset-0 bg-slate-950/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">

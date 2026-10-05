@@ -55,9 +55,15 @@ export function AdminProductModal({ item, product, onClose }: AdminProductModalP
           {/* Large Center Product Image */}
           <div className="w-28 h-28 sm:w-32 sm:h-32 mx-auto rounded-2xl bg-white text-amber-700 border border-slate-200/90 flex items-center justify-center font-bold text-4xl shadow-sm overflow-hidden">
             <img
-              src={item.image_url || product?.image_url || '/logo.png'}
+              src={item.image_url || product?.image_url || '/placeholder-product.svg'}
               alt={item.product_name}
-              className={`w-full h-full ${(item.image_url || product?.image_url) ? 'object-cover' : 'object-contain p-3'}`}
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (!target.src.endsWith('/placeholder-product.svg')) {
+                  target.src = '/placeholder-product.svg';
+                }
+              }}
+              className={`w-full h-full ${(item.image_url || product?.image_url) ? 'object-cover' : 'object-contain p-2'}`}
             />
           </div>
 

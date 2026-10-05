@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Poppins } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
 import { StoreSettingsProvider } from '@/context/StoreSettingsContext';
+import { DynamicFavicon } from '@/components/common/DynamicFavicon';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { getSiteUrl } from '@/lib/constants/site';
 
@@ -126,6 +127,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased text-slate-900 bg-slate-50 min-h-screen" suppressHydrationWarning>
         <StoreSettingsProvider>
+          <DynamicFavicon />
           <CartProvider>{children}</CartProvider>
         </StoreSettingsProvider>
       </body>

@@ -1,9 +1,14 @@
 import React from 'react';
 import { getSiteUrl } from '@/lib/constants/site';
+import { SettingsService } from '@/lib/services/settings.service';
 
-export const JsonLd: React.FC = () => {
+export const JsonLd = async () => {
+  const settings = await SettingsService.getAllSettings().catch(() => null);
   const siteUrl = getSiteUrl().replace(/\/$/, '');
   const canonicalUrl = `${siteUrl}/`;
+  const logoUrl = (settings?.logo_url && settings.logo_url !== '/logo.png')
+    ? (settings.logo_url.startsWith('http') ? settings.logo_url : `${siteUrl}${settings.logo_url}`)
+    : `${siteUrl}/favicon-192x192.png`;
 
   // 1. WebSite Schema (Official Google format to establish site name and Sitelinks Search Box)
   const websiteSchema = {
@@ -43,7 +48,7 @@ export const JsonLd: React.FC = () => {
     legalName: 'Sivakasi Fireworld Fireworks',
     alternateName: ['Sivakasi Fireworld', 'SFW'],
     url: canonicalUrl,
-    logo: `${siteUrl}/logo.png`,
+    logo: logoUrl,
     image: `${siteUrl}/og-image.png`,
     description:
       'Licensed Sivakasi fireworks manufacturer and direct factory outlet offering Diwali crackers online with wholesale transparent pricing.',
@@ -64,7 +69,7 @@ export const JsonLd: React.FC = () => {
     name: 'Sivakasi Fireworld',
     alternateName: ['Sivakasi Fireworld Fireworks', 'SFW Sivakasi'],
     url: canonicalUrl,
-    logo: `${siteUrl}/logo.png`,
+    logo: logoUrl,
     image: `${siteUrl}/og-image.png`,
     parentOrganization: {
       '@id': `${siteUrl}/#organization`,

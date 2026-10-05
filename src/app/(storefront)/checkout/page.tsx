@@ -521,9 +521,15 @@ export default function CheckoutPage() {
                     <div className="flex items-center gap-2 min-w-0 flex-1">
                       <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200/80 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs">
                         <img
-                          src={product.image_url || '/logo.png'}
+                          src={product.image_url || '/placeholder-product.svg'}
                           alt={product.name}
-                          className={`w-full h-full ${product.image_url ? 'object-cover' : 'object-contain p-1'}`}
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            if (!target.src.endsWith('/placeholder-product.svg')) {
+                              target.src = '/placeholder-product.svg';
+                            }
+                          }}
+                          className={`w-full h-full ${product.image_url ? 'object-cover' : 'object-contain p-0.5'}`}
                         />
                       </div>
                       <div className="min-w-0 flex-1 truncate">

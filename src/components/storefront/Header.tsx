@@ -59,6 +59,7 @@ export const Header: React.FC<HeaderProps> = ({
   const tagline = settings?.tagline?.trim() || 'Direct Factory Outlet • Sivakasi, Tamil Nadu';
   const storeAddress = settings?.store_address?.trim() || '';
   const announcement = settings?.announcement_banner || '⚡ DIWALI PRE-BOOKING OPEN: Sivakasi Factory Direct Rates!';
+  const logoUrl = (settings?.logo_url && settings.logo_url !== '/logo.png') ? settings.logo_url : '';
 
   // Format WhatsApp number for clear display
   const formattedWhatsapp = useMemo(() => {
@@ -99,14 +100,21 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="px-3 sm:px-4 py-2.5 max-w-7xl mx-auto flex items-center justify-between gap-2">
           {/* Two-Tone Brand Title with Logo & Sivakasi Direct Pill Badge */}
           <Link href="/" className="flex items-center gap-2 sm:gap-2.5 shrink-0 group">
-            <Image
-              src="/logo.png"
-              alt="Sivakasi Fireworld Logo"
-              width={48}
-              height={32}
-              priority
-              className="h-8 sm:h-9 w-auto max-w-[48px] sm:max-w-[54px] object-contain shrink-0 transition-transform group-hover:scale-105"
-            />
+            {logoUrl ? (
+              <Image
+                src={logoUrl}
+                alt={`${storeName} Logo`}
+                width={48}
+                height={32}
+                priority
+                unoptimized
+                className="h-8 sm:h-9 w-auto max-w-[48px] sm:max-w-[54px] object-contain shrink-0 transition-transform group-hover:scale-105"
+              />
+            ) : (
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white text-sm sm:text-base shadow-xs shrink-0 transition-transform group-hover:scale-105">
+                ✨
+              </div>
+            )}
             <div className="flex items-center gap-2">
               <span className="text-base sm:text-lg tracking-tight font-heading whitespace-nowrap">
                 <span className="font-extrabold text-slate-900">SIVAKASI</span>{' '}
@@ -347,13 +355,20 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div className="flex items-center gap-2">
-                  <Image
-                    src="/logo.png"
-                    alt="Sivakasi Fireworld Logo"
-                    width={48}
-                    height={32}
-                    className="h-7 w-auto max-w-[44px] object-contain shrink-0"
-                  />
+                  {logoUrl ? (
+                    <Image
+                      src={logoUrl}
+                      alt={`${storeName} Logo`}
+                      width={48}
+                      height={32}
+                      unoptimized
+                      className="h-7 w-auto max-w-[44px] object-contain shrink-0"
+                    />
+                  ) : (
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white text-xs shadow-xs shrink-0">
+                      ✨
+                    </div>
+                  )}
                   <span className="text-base tracking-tight font-heading whitespace-nowrap">
                     <span className="font-extrabold text-slate-900">SIVAKASI</span>{' '}
                     <span className="font-black text-amber-600">FIREWORLD</span>
@@ -457,19 +472,22 @@ export const Header: React.FC<HeaderProps> = ({
               ) : null}
             </div>
 
-            {/* Floating Logo */}
-            <div className="my-auto py-3 flex items-center justify-center">
-              <div className="relative w-36 h-36 sm:w-44 sm:h-44 flex items-center justify-center transform transition-transform duration-300 hover:scale-105">
-                <Image
-                  src="/logo.png"
-                  alt={`${storeName} Brand Logo`}
-                  width={180}
-                  height={180}
-                  className="w-full h-full object-contain filter drop-shadow-[0_12px_20px_rgba(0,0,0,0.30)]"
-                  priority
-                />
+            {/* Floating Logo - Display only when custom site logo is configured */}
+            {logoUrl ? (
+              <div className="my-auto py-3 flex items-center justify-center">
+                <div className="relative w-36 h-36 sm:w-44 sm:h-44 flex items-center justify-center transform transition-transform duration-300 hover:scale-105">
+                  <Image
+                    src={logoUrl}
+                    alt={`${storeName} Brand Logo`}
+                    width={180}
+                    height={180}
+                    unoptimized
+                    className="w-full h-full object-contain filter drop-shadow-[0_12px_20px_rgba(0,0,0,0.30)]"
+                    priority
+                  />
+                </div>
               </div>
-            </div>
+            ) : null}
 
             {/* Footer Contact Info & Address */}
             <div className="border-t border-slate-100 pt-3 text-[11px] text-slate-500 space-y-1 mt-2">

@@ -3,8 +3,13 @@
 import React from 'react';
 import Image from 'next/image';
 import { Sparkles, Flame, Factory } from 'lucide-react';
+import { useStoreSettings } from '@/context/StoreSettingsContext';
 
 export const StorefrontCatalogLoader: React.FC = () => {
+  const { settings } = useStoreSettings();
+  const logoUrl = (settings?.logo_url && settings.logo_url !== '/logo.png') ? settings.logo_url : '';
+  const storeName = settings?.store_name || 'Sivakasi Fireworld';
+
   return (
     <div className="space-y-4 font-sans animate-in fade-in duration-300">
       {/* 1. ANIMATED BRAND EMBLEM CARD */}
@@ -20,14 +25,22 @@ export const StorefrontCatalogLoader: React.FC = () => {
 
             {/* Logo Card with Badges */}
             <div className="relative bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-2 border-amber-300/80 shadow-xl shadow-amber-500/10 flex items-center justify-center transform transition-transform duration-500 hover:scale-105">
-              <Image
-                src="/logo.png"
-                alt="Sivakasi Fireworld Logo"
-                width={280}
-                height={180}
-                priority
-                className="h-16 sm:h-24 w-auto max-w-[200px] sm:max-w-[300px] object-contain drop-shadow-md"
-              />
+              {logoUrl ? (
+                <Image
+                  src={logoUrl}
+                  alt={`${storeName} Logo`}
+                  width={280}
+                  height={180}
+                  priority
+                  unoptimized
+                  className="h-16 sm:h-24 w-auto max-w-[200px] sm:max-w-[300px] object-contain drop-shadow-md"
+                />
+              ) : (
+                <div className="h-14 sm:h-18 px-4 flex items-center justify-center gap-2 text-amber-600 font-black text-lg sm:text-xl">
+                  <span>🎆</span>
+                  <span>{storeName.toUpperCase()}</span>
+                </div>
+              )}
 
               {/* Sparkle badge */}
               <div className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shadow-md animate-bounce">

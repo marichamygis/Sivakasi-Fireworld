@@ -50,13 +50,20 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Image
-              src="/logo.png"
-              alt="Sivakasi Fireworld Logo"
-              width={48}
-              height={32}
-              className="h-7 w-auto max-w-[44px] object-contain"
-            />
+            {settings?.logo_url && settings.logo_url !== '/logo.png' ? (
+              <Image
+                src={settings.logo_url}
+                alt={`${storeName} Logo`}
+                width={48}
+                height={32}
+                unoptimized
+                className="h-7 w-auto max-w-[44px] object-contain"
+              />
+            ) : (
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white text-xs shadow-xs shrink-0">
+                ✨
+              </div>
+            )}
             <span className="font-black text-sm text-slate-950">
               {storeName.toUpperCase()}
             </span>

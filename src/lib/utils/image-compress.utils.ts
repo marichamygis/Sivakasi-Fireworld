@@ -9,7 +9,7 @@ export interface CompressionOptions {
   maxWidth?: number;
   maxHeight?: number;
   quality?: number;
-  mimeType?: 'image/webp' | 'image/jpeg';
+  mimeType?: 'image/webp' | 'image/jpeg' | 'image/png';
 }
 
 const DEFAULT_OPTIONS: Required<CompressionOptions> = {
@@ -93,7 +93,7 @@ export async function compressImageFile(
               return;
             }
 
-            const ext = outputMime === 'image/webp' ? 'webp' : 'jpg';
+            const ext = outputMime === 'image/webp' ? 'webp' : outputMime === 'image/png' ? 'png' : 'jpg';
             const baseName = file.name.replace(/\.[^/.]+$/, '');
             const compressedFile = new File([blob], `${baseName}.${ext}`, {
               type: outputMime,

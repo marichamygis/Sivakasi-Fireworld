@@ -60,13 +60,20 @@ export function AdminSidebar({ userEmail, onSignOutClick, onNavClick }: AdminSid
         {/* Brand Header */}
         <div className="pb-4 border-b border-slate-100 mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5 min-w-0">
-            <Image
-              src="/logo.png"
-              alt={`${storeName} Logo`}
-              width={48}
-              height={32}
-              className="h-8 w-auto max-w-[44px] object-contain shrink-0"
-            />
+            {settings?.logo_url && settings.logo_url !== '/logo.png' ? (
+              <Image
+                src={settings.logo_url}
+                alt={`${storeName} Logo`}
+                width={48}
+                height={32}
+                unoptimized
+                className="h-8 w-auto max-w-[44px] object-contain shrink-0"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 text-slate-950 font-black flex items-center justify-center text-xs shadow-xs shrink-0">
+                SF
+              </div>
+            )}
             <div className="min-w-0">
               <span className="font-bold text-sm text-slate-900 tracking-tight block truncate max-w-[155px]" title={storeName}>
                 {storeName}

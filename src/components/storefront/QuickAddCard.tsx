@@ -54,18 +54,18 @@ export const QuickAddCard: React.FC<QuickAddCardProps> = ({ product, onQuickView
         className="relative w-full aspect-[4/3] bg-gradient-to-b from-slate-50 to-slate-100 cursor-pointer overflow-hidden flex items-center justify-center"
       >
         <img
-          src={product.image_url || '/logo.png'}
+          src={product.image_url || '/placeholder-product.svg'}
           alt={product.name}
           loading="lazy"
           decoding="async"
           onError={(e) => {
             const target = e.currentTarget;
-            if (!target.src.endsWith('/logo.png')) {
-              target.src = '/logo.png';
+            if (!target.src.endsWith('/placeholder-product.svg')) {
+              target.src = '/placeholder-product.svg';
             }
           }}
           className={`w-full h-full ${
-            product.image_url ? 'object-cover' : 'object-contain p-4'
+            product.image_url ? 'object-cover' : 'object-contain p-2'
           } group-hover:scale-108 transition-transform duration-500`}
         />
 

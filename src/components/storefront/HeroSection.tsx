@@ -19,6 +19,7 @@ import {
 import { WhatsAppIcon } from '@/components/common/WhatsAppIcon';
 import { Category, DeliveryZone } from '@/types';
 import { CategoryIcon } from './PriceListTable';
+import { useStoreSettings } from '@/context/StoreSettingsContext';
 
 interface HeroSectionProps {
   categories: Category[];
@@ -45,6 +46,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   heroBannerLinkUrl,
   heroBannerEnabled = true,
 }) => {
+  const { settings } = useStoreSettings();
+  const logoUrl = (settings?.logo_url && settings.logo_url !== '/logo.png') ? settings.logo_url : '';
   const cleanWhatsapp = (whatsappNumber || '').replace(/\D/g, '');
 
   return (
@@ -135,16 +138,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-red-600/20 rounded-full blur-3xl pointer-events-none" />
 
                   <div className="relative z-10 flex flex-col items-center">
-                    <div className="w-40 h-28 sm:w-48 sm:h-32 relative flex items-center justify-center mb-2 transition-transform duration-500 group-hover/card:scale-105">
-                      <Image
-                        src="/logo.png"
-                        alt={storeName}
-                        width={220}
-                        height={147}
-                        priority
-                        className="w-full h-full object-contain drop-shadow-[0_10px_25px_rgba(245,158,11,0.35)]"
-                      />
-                    </div>
+                    {logoUrl ? (
+                      <div className="w-40 h-28 sm:w-48 sm:h-32 relative flex items-center justify-center mb-2 transition-transform duration-500 group-hover/card:scale-105">
+                        <Image
+                          src={logoUrl}
+                          alt={storeName}
+                          width={220}
+                          height={147}
+                          priority
+                          unoptimized
+                          className="w-full h-full object-contain drop-shadow-[0_10px_25px_rgba(245,158,11,0.35)]"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-red-600 flex items-center justify-center text-4xl mb-3 shadow-xl shadow-amber-500/25 border border-amber-300/30">
+                        🎇
+                      </div>
+                    )}
 
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-[11px] font-black uppercase tracking-wider mb-1.5">
                       <Sparkles className="w-3.5 h-3.5 text-amber-400" />
