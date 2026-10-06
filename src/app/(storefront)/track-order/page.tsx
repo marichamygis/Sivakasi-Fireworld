@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
@@ -28,6 +28,7 @@ import {
 import { WhatsAppIcon } from '@/components/common/WhatsAppIcon';
 import { OrderService } from '@/lib/services/order.service';
 import { WhatsAppService } from '@/lib/services/whatsapp.service';
+import { SettingsService } from '@/lib/services/settings.service';
 import { useStoreSettings } from '@/context/StoreSettingsContext';
 import { OrderTimeline } from '@/components/common/OrderTimeline';
 import { CancelOrderModal } from '@/components/common/CancelOrderModal';
@@ -79,6 +80,14 @@ function TrackOrderContent() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('id') || searchParams.get('order') || searchParams.get('phone') || '';
   const { settings } = useStoreSettings();
+
+  const helplineList = useMemo(() => {
+    return SettingsService.getHelplineNumbers(settings);
+  }, [settings]);
+
+  const whatsappList = useMemo(() => {
+    return SettingsService.getWhatsAppNumbers(settings);
+  }, [settings]);
 
   const [searchInput, setSearchInput] = useState(initialQuery);
   const [searchedOrder, setSearchedOrder] = useState<Order | null>(null);
@@ -430,6 +439,65 @@ function TrackOrderContent() {
                   </button>
                 )}
               </div>
+
+              {/* Helplines & WhatsApp Desks Section */}
+              {(helplineList.length > 0 || whatsappList.length > 0) && (
+                <div className="pt-3 border-t border-slate-100 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
+                      Direct Support &amp; Helplines:
+                    </span>
+                    <span className="text-[9px] bg-slate-100 text-slate-600 font-bold px-1.5 py-0.5 rounded">
+                      Direct Sivakasi
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {helplineList.map((item, idx) => (
+                      <a
+                        key={`track-tel-${idx}`}
+                        href={`tel:${item.cleanTel}`}
+                        className="flex items-center justify-between p-2 bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-300 rounded-xl text-xs transition-colors group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-6 h-6 rounded-lg bg-amber-500/15 text-amber-700 flex items-center justify-center shrink-0">
+                            <Phone className="w-3 h-3" />
+                          </div>
+                          <div className="min-w-0">
+                            <span className="text-[9.5px] text-slate-400 block font-normal">{item.label}</span>
+                            <span className="font-mono text-xs font-bold text-slate-900 group-hover:text-amber-900">{item.display}</span>
+                          </div>
+                        </div>
+                        <span className="text-[9.5px] bg-amber-100 text-amber-900 font-bold px-1.5 py-0.5 rounded shrink-0">
+                          Call
+                        </span>
+                      </a>
+                    ))}
+
+                    {whatsappList.map((item, idx) => (
+                      <a
+                        key={`track-wa-${idx}`}
+                        href={`https://wa.me/${item.cleanWa}?text=${encodeURIComponent(`Hi ${settings?.store_name || 'Sivakasi Fireworld'}, I am enquiring about order #${searchedOrder.order_number} (${searchedOrder.customer_name}).`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between p-2 bg-emerald-50/70 hover:bg-emerald-100/80 border border-emerald-200 hover:border-emerald-300 rounded-xl text-xs transition-colors group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-6 h-6 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0">
+                            <WhatsAppIcon className="w-3 h-3 fill-white" />
+                          </div>
+                          <div className="min-w-0">
+                            <span className="text-[9.5px] text-emerald-700 block font-normal">{item.label}</span>
+                            <span className="font-mono text-xs font-bold text-emerald-950">{item.display}</span>
+                          </div>
+                        </div>
+                        <span className="text-[9.5px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded shrink-0">
+                          Chat
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Cancel Modal */}

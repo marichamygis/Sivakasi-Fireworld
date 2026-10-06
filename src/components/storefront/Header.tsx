@@ -23,6 +23,7 @@ import {
 import { WhatsAppIcon } from '@/components/common/WhatsAppIcon';
 import { useCart } from '@/context/CartContext';
 import { useStoreSettings } from '@/context/StoreSettingsContext';
+import { SettingsService } from '@/lib/services/settings.service';
 import { Category, DeliveryZone } from '@/types';
 
 interface HeaderProps {
@@ -51,30 +52,22 @@ export const Header: React.FC<HeaderProps> = ({
   const { itemCount, subtotal, selectedZone, setSelectedZone, minOrderThreshold, isMinOrderReached } = useCart();
   const { settings } = useStoreSettings();
 
-  const helplineMobile = settings?.helpline_mobile?.trim() || '';
-  const cleanHelpline = helplineMobile.replace(/[^\d+]/g, '');
-  const whatsappNum = settings?.whatsapp_number?.trim() || '';
-  const cleanWhatsapp = whatsappNum.replace(/\D/g, '');
   const storeName = settings?.store_name?.trim() || 'Sivakasi Fireworld';
   const tagline = settings?.tagline?.trim() || 'Direct Factory Outlet • Sivakasi, Tamil Nadu';
   const storeAddress = settings?.store_address?.trim() || '';
   const announcement = settings?.announcement_banner || '⚡ DIWALI PRE-BOOKING OPEN: Sivakasi Factory Direct Rates!';
   const logoUrl = (settings?.logo_url && settings.logo_url !== '/logo.png') ? settings.logo_url : '';
 
-  // Format WhatsApp number for clear display
-  const formattedWhatsapp = useMemo(() => {
-    if (!whatsappNum) return '';
-    const digits = whatsappNum.replace(/\D/g, '');
-    if (digits.length === 12 && digits.startsWith('91')) {
-      return `+91 ${digits.slice(2, 7)} ${digits.slice(7)}`;
-    }
-    if (digits.length === 10) {
-      return `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`;
-    }
-    return whatsappNum.startsWith('+') ? whatsappNum : `+${whatsappNum}`;
-  }, [whatsappNum]);
+  const helplineList = useMemo(() => {
+    return SettingsService.getHelplineNumbers(settings);
+  }, [settings]);
+
+  const whatsappList = useMemo(() => {
+    return SettingsService.getWhatsAppNumbers(settings);
+  }, [settings]);
 
   const [showZonePicker, setShowZonePicker] = useState(false);
+  const [showSupportDropdown, setShowSupportDropdown] = useState(false);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -165,6 +158,87 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               )}
             </div>
+
+            {/* Quick Support & Helpline Dropdown (Desktop/Tablet) */}
+            {(helplineList.length > 0 || whatsappList.length > 0) && (
+              <div className="relative hidden sm:block">
+                <button
+                  onClick={() => setShowSupportDropdown(!showSupportDropdown)}
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl text-[11px] text-emerald-900 font-bold cursor-pointer transition-colors"
+                  title="Contact Helplines & WhatsApp"
+                >
+                  <WhatsAppIcon className="w-3.5 h-3.5 fill-emerald-600" />
+                  <span>Support</span>
+                  <ChevronDown className={`w-3 h-3 text-emerald-700 transition-transform ${showSupportDropdown ? 'rotate-180' : ''}`} />
+                </button>
+
+                {showSupportDropdown && (
+                  <div className="absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-2xl shadow-xl p-2.5 z-50 animate-in fade-in zoom-in-95 space-y-2">
+                    <div className="flex items-center justify-between px-1 pb-1 border-b border-slate-100">
+                      <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
+                        Direct Customer Support
+                      </span>
+                      <button
+                        onClick={() => setShowSupportDropdown(false)}
+                        className="text-slate-400 hover:text-slate-600 cursor-pointer"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    {/* Helplines */}
+                    {helplineList.length > 0 && (
+                      <div className="space-y-1">
+                        <span className="text-[9.5px] font-bold text-amber-900 uppercase px-1 block">Calling Lines:</span>
+                        {helplineList.map((item, idx) => (
+                          <a
+                            key={`top-tel-${idx}`}
+                            href={`tel:${item.cleanTel}`}
+                            onClick={() => setShowSupportDropdown(false)}
+                            className="flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-amber-50 text-slate-800 hover:text-amber-950 transition-colors"
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              <Phone className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                              <div className="min-w-0">
+                                <span className="text-[10px] text-slate-400 block">{item.label}</span>
+                                <span className="font-mono text-xs font-bold truncate block">{item.display}</span>
+                              </div>
+                            </div>
+                            <span className="text-[9px] bg-amber-100 text-amber-900 font-bold px-1.5 py-0.5 rounded shrink-0">Call</span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* WhatsApps */}
+                    {whatsappList.length > 0 && (
+                      <div className="space-y-1 pt-1 border-t border-slate-100">
+                        <span className="text-[9.5px] font-bold text-emerald-900 uppercase px-1 block">WhatsApp Desks:</span>
+                        {whatsappList.map((item, idx) => (
+                          <a
+                            key={`top-wa-${idx}`}
+                            href={`https://wa.me/${item.cleanWa}?text=${encodeURIComponent(`Hi ${storeName}, I have an enquiry regarding fireworks.`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => setShowSupportDropdown(false)}
+                            className="flex items-center justify-between p-2 rounded-xl bg-emerald-50/70 hover:bg-emerald-100 text-emerald-950 transition-colors"
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              <WhatsAppIcon className="w-3.5 h-3.5 fill-emerald-600 shrink-0" />
+                              <div className="min-w-0">
+                                <span className="text-[10px] text-emerald-700 block">{item.label}</span>
+                                <span className="font-mono text-xs font-bold text-emerald-950 truncate block">{item.display}</span>
+                              </div>
+                            </div>
+                            <span className="text-[9px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded shrink-0">Chat</span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Cart CTA */}
             <button
@@ -410,49 +484,94 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
 
               {/* Shop Contact & Enquiry Info Section */}
-              {(helplineMobile || whatsappNum || storeAddress) ? (
+              {(helplineList.length > 0 || whatsappList.length > 0 || storeAddress) ? (
                 <div className="pt-2">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2 px-1">
-                    Shop Contact &amp; Support:
-                  </span>
+                  <div className="flex items-center justify-between mb-2 px-1">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                      Shop Contact &amp; Support:
+                    </span>
+                    <span className="text-[9px] bg-slate-100 text-slate-600 font-bold px-1.5 py-0.5 rounded">
+                      Direct Sivakasi
+                    </span>
+                  </div>
                   <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-2.5">
-                    {/* Helpline Mobile */}
-                    {helplineMobile ? (
-                      <a
-                        href={`tel:${cleanHelpline}`}
-                        className="flex items-center gap-2.5 p-2.5 bg-white hover:bg-amber-50 text-slate-800 hover:text-amber-900 border border-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs"
-                      >
-                        <div className="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-700 flex items-center justify-center shrink-0">
-                          <Phone className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="min-w-0">
-                          <span className="text-[10px] text-slate-400 block font-normal">Call Us Directly</span>
-                          <span className="font-mono text-xs">{helplineMobile}</span>
-                        </div>
-                      </a>
-                    ) : null}
+                    {/* All Helpline Mobile Lines */}
+                    {helplineList.length > 0 && (
+                      <div className="space-y-1.5">
+                        <span className="text-[10px] text-amber-900 font-extrabold uppercase tracking-wide block px-1">
+                          Direct Calling Lines:
+                        </span>
+                        {helplineList.map((item, idx) => (
+                          <a
+                            key={`drawer-tel-${idx}`}
+                            href={`tel:${item.cleanTel}`}
+                            className="flex items-center justify-between p-2.5 bg-white hover:bg-amber-50 text-slate-800 hover:text-amber-900 border border-slate-200 hover:border-amber-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs group"
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div className="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                <Phone className="w-3.5 h-3.5" />
+                              </div>
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-[10px] text-slate-400 block font-normal">{item.label}</span>
+                                  {item.isPrimary && (
+                                    <span className="text-[8.5px] bg-amber-100 text-amber-900 font-extrabold px-1 rounded border border-amber-200">
+                                      Main
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="font-mono text-xs font-bold text-slate-900 group-hover:text-amber-900">{item.display}</span>
+                              </div>
+                            </div>
+                            <span className="text-[10px] bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded-lg border border-amber-200 shrink-0">
+                              Call Now
+                            </span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
 
-                    {/* WhatsApp Number & Enquiry */}
-                    {whatsappNum ? (
-                      <a
-                        href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(`Hi ${storeName}, I have an enquiry regarding fireworks.`)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2.5 p-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs"
-                      >
-                        <div className="w-7 h-7 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0">
-                          <WhatsAppIcon className="w-3.5 h-3.5 fill-white" />
-                        </div>
-                        <div className="min-w-0">
-                          <span className="text-[10px] text-emerald-700 block font-normal">WhatsApp Enquiry</span>
-                          <span className="font-mono text-xs font-bold text-emerald-950">{formattedWhatsapp}</span>
-                        </div>
-                      </a>
-                    ) : null}
+                    {/* All WhatsApp Support Desks */}
+                    {whatsappList.length > 0 && (
+                      <div className="space-y-1.5 pt-1 border-t border-slate-200/60">
+                        <span className="text-[10px] text-emerald-900 font-extrabold uppercase tracking-wide block px-1">
+                          WhatsApp Support Desks:
+                        </span>
+                        {whatsappList.map((item, idx) => (
+                          <a
+                            key={`drawer-wa-${idx}`}
+                            href={`https://wa.me/${item.cleanWa}?text=${encodeURIComponent(`Hi ${storeName}, I have an enquiry regarding fireworks.`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-between p-2.5 bg-emerald-50/80 hover:bg-emerald-100/90 text-emerald-950 border border-emerald-200 hover:border-emerald-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs group"
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div className="w-7 h-7 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                <WhatsAppIcon className="w-3.5 h-3.5 fill-white" />
+                              </div>
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-[10px] text-emerald-700 block font-normal">{item.label}</span>
+                                  {item.isPrimary && (
+                                    <span className="text-[8.5px] bg-emerald-200/80 text-emerald-900 font-extrabold px-1 rounded border border-emerald-300">
+                                      Desk 1
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="font-mono text-xs font-bold text-emerald-950">{item.display}</span>
+                              </div>
+                            </div>
+                            <span className="text-[10px] bg-emerald-600 text-white font-bold px-2 py-0.5 rounded-lg shrink-0 shadow-2xs">
+                              Chat
+                            </span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
 
                     {/* Address in Bill (Printed on Bill & Site) */}
                     {storeAddress ? (
-                      <div className="flex items-start gap-2.5 p-2.5 bg-white text-slate-800 border border-slate-200 rounded-xl text-xs shadow-2xs">
+                      <div className="flex items-start gap-2.5 p-2.5 bg-white text-slate-800 border border-slate-200 rounded-xl text-xs shadow-2xs pt-1 border-t border-slate-200/60">
                         <div className="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-700 flex items-center justify-center shrink-0 mt-0.5">
                           <MapPin className="w-3.5 h-3.5" />
                         </div>

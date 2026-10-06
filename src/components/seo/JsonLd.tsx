@@ -78,7 +78,7 @@ export const JsonLd = async () => {
       'Direct Sivakasi factory prices on Diwali crackers, sparklers, ground chakkars, flower pots, rockets, fancy aerial shots & gift boxes. Fast doorstep delivery across Tamil Nadu & India.',
     priceRange: '₹₹',
     currenciesAccepted: 'INR',
-    paymentAccepted: 'Cash on Delivery, UPI, Net Banking, Bank Transfer',
+    paymentAccepted: 'UPI, Net Banking, Bank Transfer, QR Pay',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Sivakasi',

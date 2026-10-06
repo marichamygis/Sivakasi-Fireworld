@@ -49,11 +49,21 @@ export function StatusConfirmationModal({
       <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 space-y-4 animate-in zoom-in-95 duration-150">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 border border-amber-200">
-              <Lock className="w-5 h-5" />
+            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border ${
+              pendingStatusChange.newStatus === 'CANCELLED'
+                ? 'bg-red-100 text-red-600 border-red-200'
+                : 'bg-amber-100 text-amber-700 border-amber-200'
+            }`}>
+              {pendingStatusChange.newStatus === 'CANCELLED' ? (
+                <AlertTriangle className="w-5 h-5" />
+              ) : (
+                <Lock className="w-5 h-5" />
+              )}
             </div>
             <div>
-              <h3 className="font-black text-base text-slate-950">Confirm Stage Update</h3>
+              <h3 className="font-black text-base text-slate-950">
+                {pendingStatusChange.newStatus === 'CANCELLED' ? 'Confirm Cancellation' : 'Confirm Stage Update'}
+              </h3>
               <span className="text-xs text-slate-500 font-medium">
                 Order #{pendingStatusChange.orderNumber}
               </span>
@@ -69,7 +79,9 @@ export function StatusConfirmationModal({
 
         <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3 text-xs">
           <p className="text-slate-700 font-medium text-center">
-            Are you sure you want to transition this order to the next fulfillment stage?
+            {pendingStatusChange.newStatus === 'CANCELLED'
+              ? 'Are you sure you want to cancel this order and mark it as void?'
+              : 'Are you sure you want to transition this order to the next fulfillment stage?'}
           </p>
 
           <div className="flex items-center justify-center gap-3 pt-1 pb-1 font-black text-xs">
@@ -101,10 +113,16 @@ export function StatusConfirmationModal({
           </button>
           <button
             onClick={onConfirm}
-            className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs shadow-md transition-all active:scale-98 cursor-pointer flex items-center gap-1.5"
+            className={`px-5 py-2.5 font-black rounded-xl text-xs shadow-md transition-all active:scale-98 cursor-pointer flex items-center gap-1.5 ${
+              pendingStatusChange.newStatus === 'CANCELLED'
+                ? 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/20'
+                : 'bg-amber-500 hover:bg-amber-400 text-slate-950'
+            }`}
           >
             <Check className="w-4 h-4 stroke-[3]" />
-            <span>Confirm Stage Transition</span>
+            <span>
+              {pendingStatusChange.newStatus === 'CANCELLED' ? 'Confirm Cancellation' : 'Confirm Stage Transition'}
+            </span>
           </button>
         </div>
       </div>

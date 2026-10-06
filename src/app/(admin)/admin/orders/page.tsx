@@ -189,7 +189,7 @@ export default function AdminOrdersPage() {
       const updated = await OrderService.markOrderPaid(orderId, newPaidState);
       setOrders((prev) => prev.map((o) => (o.id === orderId ? updated : o)));
       addToast(
-        `Payment marked as ${newPaidState ? 'PAID ✓' : 'UNPAID COD'} for ${target.order_number}`,
+        `Payment marked as ${newPaidState ? 'PAID ✓' : 'UNPAID'} for ${target.order_number}`,
         'info'
       );
     } catch (err: any) {

@@ -20,6 +20,7 @@ import { WhatsAppIcon } from '@/components/common/WhatsAppIcon';
 import { Category, DeliveryZone } from '@/types';
 import { CategoryIcon } from './PriceListTable';
 import { useStoreSettings } from '@/context/StoreSettingsContext';
+import { SettingsService } from '@/lib/services/settings.service';
 
 interface HeroSectionProps {
   categories: Category[];
@@ -48,7 +49,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 }) => {
   const { settings } = useStoreSettings();
   const logoUrl = (settings?.logo_url && settings.logo_url !== '/logo.png') ? settings.logo_url : '';
-  const cleanWhatsapp = (whatsappNumber || '').replace(/\D/g, '');
+  const whatsappList = React.useMemo(() => SettingsService.getWhatsAppNumbers(settings), [settings]);
+  const cleanWhatsapp = (whatsappNumber || '').replace(/\D/g, '') || whatsappList[0]?.cleanWa || '';
 
   return (
     <div className="space-y-4 sm:space-y-6">

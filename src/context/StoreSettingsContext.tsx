@@ -19,6 +19,12 @@ function sanitizeStoreSettings(s: StoreSettings): StoreSettings {
   if (!clean.logo_url || clean.logo_url === '/logo.png') {
     clean.logo_url = '';
   }
+  if (!Array.isArray(clean.extra_helpline_mobiles)) {
+    clean.extra_helpline_mobiles = [];
+  }
+  if (!Array.isArray(clean.extra_whatsapp_numbers)) {
+    clean.extra_whatsapp_numbers = [];
+  }
   return clean;
 }
 
@@ -26,7 +32,9 @@ const DEFAULT_STORE_SETTINGS: StoreSettings = {
   store_name: 'Sivakasi Fireworld',
   tagline: 'Sivakasi Direct Fireworks Outlet',
   helpline_mobile: '',
+  extra_helpline_mobiles: [],
   whatsapp_number: '',
+  extra_whatsapp_numbers: [],
   gstin: '',
   announcement_banner: '⚡ DIWALI PRE-BOOKING OPEN: Get up to 80% OFF Factory Direct Rates!',
   discount_percentage: 80,

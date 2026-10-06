@@ -97,7 +97,7 @@ export class OrderService {
       grand_total: pricing.grandTotal,
       status: 'PENDING' as OrderStatus,
       is_paid: false,
-      payment_method: 'COD',
+      payment_method: 'DIRECT_PAYMENT',
       created_at: now,
       updated_at: now,
     };
@@ -159,23 +159,54 @@ export class OrderService {
     return createdOrder;
   }
 
+  private static isUuid(val: string): boolean {
+    if (!val) return false;
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val.trim());
+  }
+
   static async getOrderById(id: string): Promise<Order | null> {
+    if (!id) return null;
+    const cleanId = id.trim();
     const supabase = this.getSupabase();
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*, items:order_items(*)')
-      .or(`id.eq.${id},order_number.eq.${id}`)
-      .maybeSingle();
+    
+    try {
+      let query = supabase.from('orders').select('*, items:order_items(*)');
+      if (this.isUuid(cleanId)) {
+        query = query.or(`id.eq.${cleanId},order_number.eq.${cleanId}`);
+      } else {
+        query = query.ilike('order_number', cleanId);
+      }
 
-    if (error || !data) return null;
+      const { data, error } = await query.maybeSingle();
 
-    return {
-      ...data,
-      grand_total: Number(data.grand_total),
-      subtotal: Number(data.subtotal),
-      delivery_fee: Number(data.delivery_fee),
-      discount_amount: Number(data.discount_amount),
-    };
+      if (!error && data) {
+        return {
+          ...data,
+          grand_total: Number(data.grand_total),
+          subtotal: Number(data.subtotal),
+          delivery_fee: Number(data.delivery_fee),
+          discount_amount: Number(data.discount_amount),
+        };
+      }
+    } catch (err) {
+      console.warn('OrderService.getOrderById direct query error:', err);
+    }
+
+    // Resilient fallback: search in getAllOrders
+    try {
+      const allOrders = await this.getAllOrders();
+      const found = allOrders.find(
+        (o) =>
+          o.id.toLowerCase() === cleanId.toLowerCase() ||
+          o.order_number.toLowerCase() === cleanId.toLowerCase() ||
+          o.order_number.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() === cleanId.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()
+      );
+      if (found) return found;
+    } catch (err) {
+      console.error('OrderService.getOrderById fallback error:', err);
+    }
+
+    return null;
   }
 
   static async getAllOrders(): Promise<Order[]> {
@@ -210,7 +241,7 @@ export class OrderService {
       tracking_number: item.tracking_number,
       estimated_delivery: item.estimated_delivery,
       is_paid: item.is_paid ?? false,
-      payment_method: item.payment_method ?? 'COD',
+      payment_method: item.payment_method ?? 'DIRECT_PAYMENT',
       created_at: item.created_at,
       updated_at: item.updated_at,
       items: item.items
@@ -232,18 +263,48 @@ export class OrderService {
     adminNotes?: string
   ): Promise<Order> {
     const supabase = this.getSupabase();
+    const cleanId = id.trim();
+    const isIdUuid = this.isUuid(cleanId);
+
+    // Retrieve current order for history continuity
+    const current = await this.getOrderById(cleanId);
+    const nowIso = new Date().toISOString();
+
+    const newHistoryItem = {
+      status,
+      timestamp: nowIso,
+      note: adminNotes || `Status updated to ${status}`,
+      actor: 'Admin',
+    };
+
+    const updatedHistory = current && Array.isArray(current.history)
+      ? [...current.history, newHistoryItem]
+      : [newHistoryItem];
+
     const updatePayload: any = {
       status,
-      updated_at: new Date().toISOString(),
+      updated_at: nowIso,
+      history: updatedHistory,
     };
     if (adminNotes !== undefined) updatePayload.admin_notes = adminNotes;
 
-    const { data, error } = await supabase
-      .from('orders')
-      .update(updatePayload)
-      .eq('id', id)
-      .select('*, items:order_items(*)')
-      .maybeSingle();
+    let query = isIdUuid
+      ? supabase.from('orders').update(updatePayload).eq('id', cleanId)
+      : supabase.from('orders').update(updatePayload).eq('order_number', cleanId);
+
+    let { data, error } = await query.select('*, items:order_items(*)').maybeSingle();
+
+    // If failed due to history column not existing, retry without history
+    if (error) {
+      console.warn('updateOrderStatus retrying without history column:', error.message);
+      delete updatePayload.history;
+      query = isIdUuid
+        ? supabase.from('orders').update(updatePayload).eq('id', cleanId)
+        : supabase.from('orders').update(updatePayload).eq('order_number', cleanId);
+      const retryRes = await query.select('*, items:order_items(*)').maybeSingle();
+      data = retryRes.data;
+      error = retryRes.error;
+    }
 
     if (error || !data) {
       console.error('OrderService.updateOrderStatus error:', error?.message);
@@ -252,6 +313,7 @@ export class OrderService {
 
     const updatedOrder: Order = {
       ...data,
+      history: data.history || updatedHistory,
       grand_total: Number(data.grand_total),
       subtotal: Number(data.subtotal),
       delivery_fee: Number(data.delivery_fee),
@@ -264,7 +326,7 @@ export class OrderService {
           const bc = new BroadcastChannel('vpp_orders_channel');
           bc.postMessage({
             type: 'ORDER_STATUS_CHANGED',
-            orderId: id,
+            orderId: updatedOrder.id,
             orderNumber: updatedOrder.order_number,
             status,
             order: updatedOrder,
@@ -282,12 +344,13 @@ export class OrderService {
   static async cancelOrder(
     id: string,
     reason?: string,
-    cancelledBy: 'CUSTOMER' | 'ADMIN' = 'CUSTOMER'
+    cancelledBy: 'CUSTOMER' | 'ADMIN' = 'ADMIN'
   ): Promise<Order> {
     const supabase = this.getSupabase();
+    const cleanId = id.trim();
 
     // First retrieve current order to verify status and preserve notes
-    const current = await this.getOrderById(id);
+    const current = await this.getOrderById(cleanId);
     if (!current) {
       throw new Error(`Order ${id} not found.`);
     }
@@ -319,16 +382,42 @@ export class OrderService {
       ? `${current.admin_notes}\n${reasonText}`
       : reasonText;
 
-    const { data, error } = await supabase
-      .from('orders')
-      .update({
-        status: 'CANCELLED',
-        admin_notes: updatedNotes,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', current.id)
-      .select('*, items:order_items(*)')
-      .maybeSingle();
+    const newHistoryItem = {
+      status: 'CANCELLED' as OrderStatus,
+      timestamp: new Date().toISOString(),
+      note: reason || `Cancelled by ${cancelledBy === 'ADMIN' ? 'Admin' : 'Customer'}`,
+      actor: cancelledBy === 'ADMIN' ? 'Admin' : 'Customer',
+    };
+
+    const updatedHistory = Array.isArray(current.history)
+      ? [...current.history, newHistoryItem]
+      : [newHistoryItem];
+
+    const isCurrentUuid = this.isUuid(current.id);
+    const updatePayload: any = {
+      status: 'CANCELLED',
+      admin_notes: updatedNotes,
+      history: updatedHistory,
+      updated_at: new Date().toISOString(),
+    };
+
+    let query = isCurrentUuid
+      ? supabase.from('orders').update(updatePayload).eq('id', current.id)
+      : supabase.from('orders').update(updatePayload).eq('order_number', current.order_number);
+
+    let { data, error } = await query.select('*, items:order_items(*)').maybeSingle();
+
+    // If update with history fails, retry without history column
+    if (error) {
+      console.warn('OrderService.cancelOrder retrying without history column:', error.message);
+      delete updatePayload.history;
+      query = isCurrentUuid
+        ? supabase.from('orders').update(updatePayload).eq('id', current.id)
+        : supabase.from('orders').update(updatePayload).eq('order_number', current.order_number);
+      const retryRes = await query.select('*, items:order_items(*)').maybeSingle();
+      data = retryRes.data;
+      error = retryRes.error;
+    }
 
     if (error || !data) {
       console.error('OrderService.cancelOrder error:', error?.message);
@@ -337,6 +426,7 @@ export class OrderService {
 
     const cancelledOrder: Order = {
       ...data,
+      history: data.history || updatedHistory,
       grand_total: Number(data.grand_total),
       subtotal: Number(data.subtotal),
       delivery_fee: Number(data.delivery_fee),
@@ -354,7 +444,14 @@ export class OrderService {
             orderNumber: cancelledOrder.order_number,
             order: cancelledOrder,
             cancelledBy,
-            reason: reason || 'No reason specified',
+            reason: reason || 'Order cancelled by Admin',
+          });
+          bc.postMessage({
+            type: 'ORDER_STATUS_CHANGED',
+            orderId: current.id,
+            orderNumber: cancelledOrder.order_number,
+            status: 'CANCELLED',
+            order: cancelledOrder,
           });
           bc.close();
         }
@@ -364,6 +461,103 @@ export class OrderService {
     }
 
     return cancelledOrder;
+  }
+
+  static async reopenOrder(
+    id: string,
+    restoreStatus: OrderStatus = 'CONFIRMED',
+    reason?: string
+  ): Promise<Order> {
+    const supabase = this.getSupabase();
+    const cleanId = id.trim();
+
+    const current = await this.getOrderById(cleanId);
+    if (!current) {
+      throw new Error(`Order ${id} not found.`);
+    }
+
+    const timestamp = new Date().toLocaleString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    const reopenText = reason
+      ? `[Admin Reopened] (${timestamp}): Restored from CANCELLED to ${restoreStatus}. Reason: ${reason}`
+      : `[Admin Reopened] (${timestamp}): Restored from CANCELLED to ${restoreStatus}.`;
+
+    const updatedNotes = current.admin_notes
+      ? `${current.admin_notes}\n${reopenText}`
+      : reopenText;
+
+    const newHistoryItem = {
+      status: restoreStatus,
+      timestamp: new Date().toISOString(),
+      note: reason || `Reopened order by Admin to ${restoreStatus}`,
+      actor: 'Admin',
+    };
+
+    const updatedHistory = Array.isArray(current.history)
+      ? [...current.history, newHistoryItem]
+      : [newHistoryItem];
+
+    const isCurrentUuid = this.isUuid(current.id);
+    const updatePayload: any = {
+      status: restoreStatus,
+      admin_notes: updatedNotes,
+      history: updatedHistory,
+      updated_at: new Date().toISOString(),
+    };
+
+    let query = isCurrentUuid
+      ? supabase.from('orders').update(updatePayload).eq('id', current.id)
+      : supabase.from('orders').update(updatePayload).eq('order_number', current.order_number);
+
+    let { data, error } = await query.select('*, items:order_items(*)').maybeSingle();
+
+    if (error) {
+      delete updatePayload.history;
+      query = isCurrentUuid
+        ? supabase.from('orders').update(updatePayload).eq('id', current.id)
+        : supabase.from('orders').update(updatePayload).eq('order_number', current.order_number);
+      const retryRes = await query.select('*, items:order_items(*)').maybeSingle();
+      data = retryRes.data;
+      error = retryRes.error;
+    }
+
+    if (error || !data) {
+      throw new Error(error?.message || `Failed to reopen order ${id}.`);
+    }
+
+    const restoredOrder: Order = {
+      ...data,
+      history: data.history || updatedHistory,
+      grand_total: Number(data.grand_total),
+      subtotal: Number(data.subtotal),
+      delivery_fee: Number(data.delivery_fee),
+      discount_amount: Number(data.discount_amount),
+    };
+
+    if (typeof window !== 'undefined') {
+      try {
+        if ('BroadcastChannel' in window) {
+          const bc = new BroadcastChannel('vpp_orders_channel');
+          bc.postMessage({
+            type: 'ORDER_STATUS_CHANGED',
+            orderId: current.id,
+            orderNumber: restoredOrder.order_number,
+            status: restoreStatus,
+            order: restoredOrder,
+          });
+          bc.close();
+        }
+      } catch (e) {
+        console.error('Failed to broadcast reopen order:', e);
+      }
+    }
+
+    return restoredOrder;
   }
 
   static async updateOrderLogistics(
@@ -377,6 +571,9 @@ export class OrderService {
     }
   ): Promise<Order> {
     const supabase = this.getSupabase();
+    const cleanId = id.trim();
+    const isIdUuid = this.isUuid(cleanId);
+
     const payload: any = { updated_at: new Date().toISOString() };
     if (logistics.courier_partner !== undefined) payload.courier_partner = logistics.courier_partner;
     if (logistics.tracking_number !== undefined) payload.tracking_number = logistics.tracking_number;
@@ -384,10 +581,11 @@ export class OrderService {
     if (logistics.admin_notes !== undefined) payload.admin_notes = logistics.admin_notes;
     if (logistics.status !== undefined) payload.status = logistics.status;
 
-    const { data, error } = await supabase
-      .from('orders')
-      .update(payload)
-      .eq('id', id)
+    const query = isIdUuid
+      ? supabase.from('orders').update(payload).eq('id', cleanId)
+      : supabase.from('orders').update(payload).eq('order_number', cleanId);
+
+    const { data, error } = await query
       .select('*, items:order_items(*)')
       .maybeSingle();
 
@@ -406,10 +604,14 @@ export class OrderService {
 
   static async markOrderPaid(id: string, isPaid: boolean): Promise<Order> {
     const supabase = this.getSupabase();
-    const { data, error } = await supabase
-      .from('orders')
-      .update({ is_paid: isPaid, updated_at: new Date().toISOString() })
-      .eq('id', id)
+    const cleanId = id.trim();
+    const isIdUuid = this.isUuid(cleanId);
+
+    const query = isIdUuid
+      ? supabase.from('orders').update({ is_paid: isPaid, updated_at: new Date().toISOString() }).eq('id', cleanId)
+      : supabase.from('orders').update({ is_paid: isPaid, updated_at: new Date().toISOString() }).eq('order_number', cleanId);
+
+    const { data, error } = await query
       .select('*, items:order_items(*)')
       .maybeSingle();
 

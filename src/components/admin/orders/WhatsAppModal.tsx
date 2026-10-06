@@ -9,6 +9,7 @@ import {
   Truck,
   CheckCircle2,
   Edit3,
+  AlertTriangle,
   PhoneCall,
 } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/common/WhatsAppIcon';
@@ -78,6 +79,7 @@ export function WhatsAppModal({
     { id: 'ORDER_RECEIPT', label: 'Order Receipt', icon: FileText },
     { id: 'STATUS_UPDATE', label: 'Status Notice', icon: CheckCircle2 },
     { id: 'DISPATCH_TRACKING', label: 'Dispatch Info', icon: Truck },
+    { id: 'ORDER_CANCELLED', label: 'Cancellation Notice', icon: AlertTriangle },
     { id: 'CUSTOM', label: 'Custom Note', icon: Edit3 },
   ];
 

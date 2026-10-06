@@ -2,11 +2,22 @@ import { createClient } from '@/lib/supabase/client';
 import { localCache } from '@/lib/utils/cache.utils';
 import { compressImageFile } from '@/lib/utils/image-compress.utils';
 
+export interface PhoneNumberEntry {
+  display: string;
+  cleanDigits: string;
+  cleanTel: string;
+  cleanWa: string;
+  isPrimary: boolean;
+  label: string;
+}
+
 export interface StoreSettings {
   store_name: string;
   tagline: string;
   helpline_mobile: string;
+  extra_helpline_mobiles?: string[];
   whatsapp_number: string;
+  extra_whatsapp_numbers?: string[];
   gstin: string;
   announcement_banner: string;
   discount_percentage: number;
@@ -26,7 +37,9 @@ const DEFAULT_SETTINGS: StoreSettings = {
   store_name: 'Sivakasi Fireworld',
   tagline: 'Sivakasi Direct Fireworks Outlet',
   helpline_mobile: '',
+  extra_helpline_mobiles: [],
   whatsapp_number: '',
+  extra_whatsapp_numbers: [],
   gstin: '',
   announcement_banner: '⚡ DIWALI PRE-BOOKING OPEN: Get up to 80% OFF Factory Direct Rates!',
   discount_percentage: 80,
@@ -137,11 +150,37 @@ export class SettingsService {
           .then();
       }
 
+      let extraHelplines: string[] = [];
+      if (settingsMap['extra_helpline_mobiles']) {
+        try {
+          const parsed = JSON.parse(settingsMap['extra_helpline_mobiles']);
+          if (Array.isArray(parsed)) {
+            extraHelplines = parsed.map((s) => String(s).trim()).filter(Boolean);
+          }
+        } catch {
+          extraHelplines = [];
+        }
+      }
+
+      let extraWhatsapps: string[] = [];
+      if (settingsMap['extra_whatsapp_numbers']) {
+        try {
+          const parsed = JSON.parse(settingsMap['extra_whatsapp_numbers']);
+          if (Array.isArray(parsed)) {
+            extraWhatsapps = parsed.map((s) => String(s).trim()).filter(Boolean);
+          }
+        } catch {
+          extraWhatsapps = [];
+        }
+      }
+
       const settings: StoreSettings = {
         store_name: resolvedStoreName,
         tagline: settingsMap['tagline'] ?? DEFAULT_SETTINGS.tagline,
         helpline_mobile: settingsMap['helpline_mobile'] ?? DEFAULT_SETTINGS.helpline_mobile,
+        extra_helpline_mobiles: extraHelplines,
         whatsapp_number: settingsMap['whatsapp_number'] ?? DEFAULT_SETTINGS.whatsapp_number,
+        extra_whatsapp_numbers: extraWhatsapps,
         gstin: settingsMap['gstin'] !== undefined ? settingsMap['gstin'] : DEFAULT_SETTINGS.gstin,
         announcement_banner: settingsMap['announcement_banner'] ?? DEFAULT_SETTINGS.announcement_banner,
         discount_percentage: !isNaN(parsedDiscount) && parsedDiscount >= 0 ? parsedDiscount : DEFAULT_SETTINGS.discount_percentage,
@@ -311,8 +350,10 @@ export class SettingsService {
     const rows = [
       { key: 'store_name', value: settings.store_name },
       { key: 'tagline', value: settings.tagline },
-      { key: 'helpline_mobile', value: settings.helpline_mobile },
-      { key: 'whatsapp_number', value: settings.whatsapp_number },
+      { key: 'helpline_mobile', value: settings.helpline_mobile || '' },
+      { key: 'extra_helpline_mobiles', value: JSON.stringify(settings.extra_helpline_mobiles || []) },
+      { key: 'whatsapp_number', value: settings.whatsapp_number || '' },
+      { key: 'extra_whatsapp_numbers', value: JSON.stringify(settings.extra_whatsapp_numbers || []) },
       { key: 'gstin', value: settings.gstin },
       { key: 'announcement_banner', value: settings.announcement_banner },
       { key: 'discount_percentage', value: String(settings.discount_percentage) },
@@ -393,4 +434,118 @@ export class SettingsService {
 
     return true;
   }
+
+  /**
+   * Parse primary and extra phone numbers, splitting any comma/slash/semicolon/newline separated entries.
+   * Returns a normalized list of PhoneNumberEntry items without duplicates.
+   */
+  static parsePhoneNumbers(
+    primary?: string,
+    extras?: string[],
+    type: 'tel' | 'wa' = 'tel'
+  ): PhoneNumberEntry[] {
+    const rawTokens: { text: string; isPrimary: boolean }[] = [];
+
+    // 1. Process primary
+    if (primary && primary.trim()) {
+      const parts = primary.split(/[,;\n/]+/).map((p) => p.trim()).filter(Boolean);
+      parts.forEach((p, idx) => {
+        rawTokens.push({ text: p, isPrimary: idx === 0 });
+      });
+    }
+
+    // 2. Process extras
+    if (Array.isArray(extras)) {
+      extras.forEach((ext) => {
+        if (!ext || !ext.trim()) return;
+        const parts = ext.split(/[,;\n/]+/).map((p) => p.trim()).filter(Boolean);
+        parts.forEach((p) => {
+          rawTokens.push({ text: p, isPrimary: false });
+        });
+      });
+    }
+
+    const seenDigits = new Set<string>();
+    const results: PhoneNumberEntry[] = [];
+
+    rawTokens.forEach(({ text, isPrimary }) => {
+      const digits = text.replace(/\D/g, '');
+      if (!digits) return;
+
+      // Deduplicate on last 10 digits for Indian mobiles, or full digits if shorter
+      const dedupKey = digits.length >= 10 ? digits.slice(-10) : digits;
+      if (seenDigits.has(dedupKey)) return;
+      seenDigits.add(dedupKey);
+
+      let cleanDigits = digits;
+      let cleanTel = '';
+      let cleanWa = '';
+      let display = text.trim();
+
+      if (digits.length === 10) {
+        cleanDigits = `91${digits}`;
+        cleanTel = `+91${digits}`;
+        cleanWa = `91${digits}`;
+        display = `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`;
+      } else if (digits.length === 12 && digits.startsWith('91')) {
+        cleanDigits = digits;
+        cleanTel = `+${digits}`;
+        cleanWa = digits;
+        display = `+91 ${digits.slice(2, 7)} ${digits.slice(7)}`;
+      } else if (text.startsWith('+')) {
+        cleanTel = `+${digits}`;
+        cleanWa = digits;
+        display = text;
+      } else {
+        cleanTel = `+${digits}`;
+        cleanWa = digits;
+        display = text;
+      }
+
+      const idx = results.length;
+      let label = '';
+      if (type === 'tel') {
+        label = idx === 0 ? 'Helpline (Line 1)' : `Helpline Line ${idx + 1} (Alternate)`;
+      } else {
+        label = idx === 0 ? 'WhatsApp Desk 1' : `WhatsApp Desk ${idx + 1} (Alternate)`;
+      }
+
+      results.push({
+        display,
+        cleanDigits,
+        cleanTel,
+        cleanWa,
+        isPrimary,
+        label,
+      });
+    });
+
+    return results;
+  }
+
+  /**
+   * Get all configured helpline numbers with formatting and metadata.
+   */
+  static getHelplineNumbers(settings?: StoreSettings | null): PhoneNumberEntry[] {
+    if (!settings) return [];
+    return this.parsePhoneNumbers(settings.helpline_mobile, settings.extra_helpline_mobiles, 'tel');
+  }
+
+  /**
+   * Get all configured WhatsApp support numbers with formatting and metadata.
+   */
+  static getWhatsAppNumbers(settings?: StoreSettings | null): PhoneNumberEntry[] {
+    if (!settings) return [];
+    return this.parsePhoneNumbers(settings.whatsapp_number, settings.extra_whatsapp_numbers, 'wa');
+  }
+
+  /**
+   * Combined string of all helpline numbers for printing (e.g. Packing Slip).
+   */
+  static getCombinedHelplineString(settings?: StoreSettings | null): string {
+    const list = this.getHelplineNumbers(settings);
+    if (list.length === 0) return settings?.helpline_mobile?.trim() || '';
+    return list.map((item) => item.display).join(' / ');
+  }
 }
+

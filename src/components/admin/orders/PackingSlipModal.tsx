@@ -7,6 +7,7 @@ import { X, Printer, Sparkles, Tag } from 'lucide-react';
 import { Order, Product } from '@/types';
 import { useStoreSettings } from '@/context/StoreSettingsContext';
 import { ProductService } from '@/lib/services/product.service';
+import { SettingsService } from '@/lib/services/settings.service';
 
 interface PackingSlipModalProps {
   order: Order | null;
@@ -265,13 +266,13 @@ export function PackingSlipModal({ order, onClose }: PackingSlipModalProps) {
                 {settings.store_address}
               </span>
             ) : null}
-            {(settings?.gstin?.trim() || settings?.helpline_mobile?.trim()) ? (
+            {(settings?.gstin?.trim() || SettingsService.getCombinedHelplineString(settings)) ? (
               <div className="flex items-center gap-3 pt-1 text-xs print:text-[8.5pt] text-slate-700 font-mono font-bold border-t border-slate-200/80 mt-1">
                 {settings?.gstin && settings.gstin.trim() ? (
                   <span>GSTIN: {settings.gstin.trim()}</span>
                 ) : null}
-                {settings?.helpline_mobile && settings.helpline_mobile.trim() ? (
-                  <span>Ph: {settings.helpline_mobile.trim()}</span>
+                {SettingsService.getCombinedHelplineString(settings) ? (
+                  <span>Ph: {SettingsService.getCombinedHelplineString(settings)}</span>
                 ) : null}
               </div>
             ) : null}
